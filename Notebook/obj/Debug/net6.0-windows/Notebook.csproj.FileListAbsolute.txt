@@ -4,11 +4,9 @@ C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\Notebook.r
 C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\Notebook.dll
 C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\Notebook.pdb
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.csproj.AssemblyReference.cache
-C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\MainWindow.g.cs
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\App.g.cs
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook_MarkupCompile.cache
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook_MarkupCompile.lref
-C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\MainWindow.baml
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.g.resources
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.AssemblyInfoInputs.cache
@@ -19,3 +17,10 @@ C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\refint\Not
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.pdb
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.genruntimeconfig.cache
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\ref\Notebook.dll
+C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\MaterialDesignColors.dll
+C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\MaterialDesignThemes.Wpf.dll
+C:\Users\User\source\repos\Notebook\Notebook\bin\Debug\net6.0-windows\WPF_MVVM_Classes.dll
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\AuthWindow.g.cs
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\App.baml
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\AuthWindow.baml
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.csproj.CopyComplete
