@@ -24,3 +24,5 @@ C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\AuthWindow
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\App.baml
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\AuthWindow.baml
 C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\Notebook.csproj.CopyComplete
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\KeyboardWindow.g.cs
+C:\Users\User\source\repos\Notebook\Notebook\obj\Debug\net6.0-windows\KeyboardWindow.baml
