@@ -24,5 +24,6 @@ namespace Notebook.Domain
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<GraphKeyPoint> GraphKeyPoints { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
     }
 }

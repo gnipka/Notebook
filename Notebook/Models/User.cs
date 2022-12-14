@@ -32,5 +32,10 @@ namespace Notebook.Models
         /// Точки графического ключа данного пользователя 
         /// </summary>
         public ICollection<GraphKeyPoint> GraphKeyPoints { get; set; }
+
+        /// <summary>
+        /// Записи данного пользователя 
+        /// </summary>
+        public ICollection<Note> Notes { get; set; }
     }
 }
