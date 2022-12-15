@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows;
 using WPF_MVVM_Classes;
 
 namespace Notebook.ViewModels
 {
+    class Cell
+    {
+        public char Symbol { get; set; }
+        public long Time { get; set; }
+    }
+
     internal class KeyboardViewModel : ViewModelBase, IDataErrorInfo
     {
         #region Constructor
@@ -15,6 +23,7 @@ namespace Notebook.ViewModels
             LeftBord = 3;
             RightBord = 10;
             CountRepeat = 5;
+            ReadOnly = true;
         }
         #endregion
 
@@ -25,7 +34,14 @@ namespace Notebook.ViewModels
         private int _rightBord;
         private int _countRepeat;
         private bool _run;
+        private bool _readOnly;
         private Stopwatch _sw;
+        private long _time;
+        private char _currentCharPhrase;
+        private int _counterChar;
+        private int _counterPhrase;
+        private string _formatterPhrase;
+        private List<Cell> _table = new List<Cell>();
         #endregion
 
         #region Properties
@@ -45,6 +61,77 @@ namespace Notebook.ViewModels
             set
             {
                 _phraseChecker = value;
+
+
+                if (_phraseChecker.Substring(_phraseChecker.Length - 1) != "\n" && _phraseChecker.Substring(_phraseChecker.Length - 1) != "\r")
+                {
+
+                    if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
+                    {
+                        _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds });
+                        if (_counterChar == _formatterPhrase.Length - 1)
+                        {
+                            if (_counterPhrase == CountRepeat)
+                            {
+                                _run = false;
+                                // вызываем окно ежедневника
+                                MessageBox.Show("OK");
+
+                            }
+                            else
+                            {
+                                _counterChar = 0;
+                                _currentCharPhrase = _formatterPhrase[_counterChar];
+                                _counterPhrase++;
+                            }
+                        }
+                        else
+                        {
+                            _counterChar++;
+                            _currentCharPhrase = _formatterPhrase[_counterChar];
+                        }
+
+                    }
+                    else
+                    {
+                        _run = false;
+                        Time = 0;
+                        ReadOnly = true;
+                        _phraseChecker = String.Empty;
+                        MessageBox.Show("Ошибка при вводе фразы. Необходимо начать заново :(");
+                    }
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public Stopwatch Sw
+        {
+            get { return _sw; }
+            set
+            {
+                _sw = value;                
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                _readOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public long Time
+        {
+            get { return _time; }
+            set
+            {
+                _time = value;
                 OnPropertyChanged();
             }
         }
@@ -105,13 +192,31 @@ namespace Notebook.ViewModels
         {
             await Task.Run(() =>
             {
-                _sw = new Stopwatch();
-                while (_run)
-                {
-                    _sw.Start();
+                Sw = Stopwatch.StartNew();
+                while (_run) {
+                    Time = _sw.ElapsedMilliseconds / 1000;
                 }
-                _sw.Stop();
+                Sw.Stop();
             });
+        }
+
+        private RelayCommand _checkPhrase;
+        public RelayCommand CheckPhrase
+        {
+            get
+            {
+                return _checkPhrase ??= new RelayCommand(async x =>
+                {
+                    // добавить проверку фразы из бд
+                    _counterChar = 0;
+                    _counterPhrase = 1;
+                    _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
+                    _run = true; // ставим метку для таймера
+                    _formatterPhrase = Phrase;
+                    ReadOnly = false;
+                    StartTimer(); // запускаем таймер
+                });
+            }
         }
     }
 }
