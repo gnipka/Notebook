@@ -24,11 +24,11 @@ namespace Notebook
             var builder = new ContainerBuilder();
             builder.RegisterType<ApplicationContext>().AsSelf();
             builder.RegisterType<EFUserRepository>().As<IRepository<User>>();
-            builder.RegisterType<MainWindowViewModel>().AsSelf();
+            builder.RegisterType<AuthViewModel>().AsSelf();
             var container = builder.Build();
-            var mainWindowViewModel = container.Resolve<MainWindowViewModel>();
-            var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
-            mainWindow.Show();
+            var authViewModel = container.Resolve<AuthViewModel>();
+            var authWindow = new AuthWindow{ DataContext = authViewModel };
+            authWindow.Show();
         }
     }
 }
