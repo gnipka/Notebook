@@ -11,19 +11,22 @@ namespace Notebook.Domain
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext() { }
+        public ApplicationContext()
+        {
+            Database.Migrate();
+        }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = NotebookDb;");
-            }
+            optionsBuilder.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = NotebookDb;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Note>().HasData(new Note
             {
                 Id = 1,
@@ -46,7 +49,7 @@ namespace Notebook.Domain
                     HasGraphKey = false,
                 });
 
-            
+
         }
 
         public virtual DbSet<User> Users { get; set; }
