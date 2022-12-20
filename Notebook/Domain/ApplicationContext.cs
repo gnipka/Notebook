@@ -24,7 +24,18 @@ namespace Notebook.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "login",
+                    Password = @"\u001e\u000f\u001d\u001d\u0019\u0001\u001c\n", // "password" ^ "n" -> "\u001e\u000f\u001d\u001d\u0019\u0001\u001c\n"
+                    GraphKeyPoints = null,
+                    PathToImage = "",
+                    DateRegister = DateTime.Now,
+                    Notes = null,
+                    HasGraphKey = false,
+                });
         }
 
         public virtual DbSet<User> Users { get; set; }

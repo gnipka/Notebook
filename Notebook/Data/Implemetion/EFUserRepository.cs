@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Notebook.Data.Abstract;
@@ -34,11 +36,12 @@ namespace Notebook.Data.Implemetion
 
         public async Task<User?> VerifyUserAsync(string username, string password)
         {
-            var passwordEncode = Cipher(password, 'n');
-            var value = await _context.Users
+            var passwordEncode = Cipher(password, "n");
+            var value = _context.Users
                 .Include(x => x.GraphKeyPoints)
                 .Include(x => x.Notes)
-                .FirstOrDefaultAsync(x => x.Username == username && x.Password == passwordEncode);
+                .ToList()
+                .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
             return value;
         }
 
@@ -81,15 +84,30 @@ namespace Notebook.Data.Implemetion
             await _context.SaveChangesAsync();
         }
 
-        private string Cipher(string text, char secretKey)
+        //генератор повторений пароля
+        private string GetRepeatKey(string s, int n)
         {
-            var res = new StringBuilder();
-            foreach (var t in text)
+            var r = s;
+            while (r.Length < n)
             {
-                res.Append(t ^ secretKey);
+                r += r;
             }
 
-            return res.ToString();
+            return r.Substring(0, n);
+        }
+
+        //метод шифрования/дешифровки
+        private string Cipher(string text, string secretKey)
+        {
+            var currentKey = GetRepeatKey(secretKey, text.Length);
+            var res = string.Empty;
+            for (var i = 0; i < text.Length; i++)
+            {
+                res += ((char)(text[i] ^ currentKey[i])).ToString();
+            }
+
+            Debug.WriteLine(res);
+            return res;
         }
 
     }
