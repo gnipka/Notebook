@@ -1,0 +1,29 @@
+﻿<Window x:Class="Notebook.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notebook"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="480" Width="800"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Блокнот">
+                Какие-то записи пользователя
+            </TabItem>
+            <TabItem Header="Клавиатурный почерк">
+                Создание и настройка клавиатурного почерка пользователя
+            </TabItem>
+            <TabItem Header="Графический ключ">
+                <StackPanel>
+                    <Button Width="200" HorizontalAlignment="Left" Margin="5" Command="{Binding ChooseImage}" >Выбрать картинку</Button>
+                    <Image Name="image" MaxWidth="600" MinWidth="600" MaxHeight="300" MinHeight="300" Source="{Binding Image}" MouseLeftButtonDown="Image_OnMouseLeftButtonDown"></Image>
+                    <Button Width="200" HorizontalAlignment="Left" Margin="5" Click="ButtonBase_OnClick" Command="{Binding SaveCommand}">Сохранить</Button>
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

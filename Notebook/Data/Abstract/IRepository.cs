@@ -13,7 +13,7 @@ namespace Notebook.Data.Abstract
 
         Task<T> GetByIdAsync(int id);
 
-        Task<bool> VerifyUserAsync(string username, string password);
+        Task<User?> VerifyUserAsync(string username, string password);
 
         Task<bool> SaveAsync(T obj);
 

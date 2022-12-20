@@ -1,5 +1,8 @@
 ﻿using Notebook.ViewModels;
 using System.Windows;
+using Notebook.Data.Abstract;
+using Notebook.Models;
+using System.Windows.Controls;
 
 namespace Notebook
 {
@@ -11,7 +14,12 @@ namespace Notebook
         public AuthWindow()
         {
             InitializeComponent();
-            DataContext = new AuthViewModel();
+        }
+
+        private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            //это позволяет передать пароль во viewModel
+            ((dynamic)this.DataContext).Pass = ((PasswordBox)sender).Password;
         }
     }
 }

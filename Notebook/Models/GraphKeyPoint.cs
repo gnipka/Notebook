@@ -16,13 +16,18 @@ namespace Notebook.Models
         /// <summary>
         /// Значение точки по X
         /// </summary>
-        public int XValue { get; set; }
+        public double XValue { get; set; }
         
         /// <summary>
         /// Значение точки по Y
         /// </summary>
-        public int YValue { get; set; }
-        
+        public double YValue { get; set; }
+
+        /// <summary>
+        /// Допустимое отклонение в пикселях
+        /// </summary>
+        public double Delta { get; set; }
+
         /// <summary>
         /// Номер точки в последовательности точек ключа
         /// </summary>

@@ -22,6 +22,11 @@ namespace Notebook.Domain
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<GraphKeyPoint> GraphKeyPoints { get; set; }
         public virtual DbSet<Note> Notes { get; set; }

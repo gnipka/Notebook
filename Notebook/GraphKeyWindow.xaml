@@ -1,0 +1,17 @@
+﻿<Window x:Class="Notebook.GraphKeyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notebook"
+        mc:Ignorable="d"
+        Title="GraphKeyWindow" Height="450" Width="800" MaxWidth="800" MinWidth="800" MaxHeight="450" MinHeight="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Image Name="image" MaxWidth="600" MinWidth="600" MaxHeight="300" MinHeight="300" Grid.Row="0" Source="{Binding Image}" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"></Image>
+        <Button Width="150" Grid.Row="1" Margin="1 1 1 1" Click="ButtonBase_OnClick" Command="{Binding LoginButton}">Войти</Button>
+    </Grid>
+</Window>

@@ -29,6 +29,16 @@ namespace Notebook.Models
         public DateTime DateRegister { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Есть ли у пользователя графический ключ
+        /// </summary>
+        public bool HasGraphKey { get; set; }
+
+        /// <summary>
+        /// Путь к картинке для графического ключа
+        /// </summary>
+        public string PathToImage { get; set; }
+
+        /// <summary>
         /// Точки графического ключа данного пользователя 
         /// </summary>
         public ICollection<GraphKeyPoint> GraphKeyPoints { get; set; }

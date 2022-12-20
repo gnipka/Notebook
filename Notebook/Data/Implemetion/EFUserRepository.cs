@@ -21,19 +21,25 @@ namespace Notebook.Data.Implemetion
 
         public IReadOnlyCollection<User> GetAll()
         {
-            return _context.Users.ToList();
+            return _context.Users
+                .Include(x => x.GraphKeyPoints)
+                .Include(x => x.Notes)
+                .ToList();
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users.FirstAsync(m => m.Id == id);
+            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.Notes).FirstAsync(m => m.Id == id);
         }
 
-        public async Task<bool> VerifyUserAsync(string username, string password)
+        public async Task<User?> VerifyUserAsync(string username, string password)
         {
-            //TODO: пока без шифрования
-            var value = await _context.Users.FirstOrDefaultAsync(x => (x.Username == username && x.Password == password));
-            return value != null;
+            var passwordEncode = Cipher(password, 'n');
+            var value = await _context.Users
+                .Include(x => x.GraphKeyPoints)
+                .Include(x => x.Notes)
+                .FirstOrDefaultAsync(x => x.Username == username && x.Password == passwordEncode);
+            return value;
         }
 
         public async Task<bool> SaveAsync(User user)
@@ -50,6 +56,8 @@ namespace Notebook.Data.Implemetion
                         dbEntry.Username = user.Username;
                         dbEntry.Password = user.Password;
                         dbEntry.DateRegister = user.DateRegister;
+                        dbEntry.PathToImage = user.PathToImage;
+                        dbEntry.HasGraphKey = user.HasGraphKey;
                         dbEntry.GraphKeyPoints = user.GraphKeyPoints;
                         dbEntry.Notes = user.Notes;
                     }
@@ -72,5 +80,17 @@ namespace Notebook.Data.Implemetion
                 _context.Users.Remove(value);
             await _context.SaveChangesAsync();
         }
+
+        private string Cipher(string text, char secretKey)
+        {
+            var res = new StringBuilder();
+            foreach (var t in text)
+            {
+                res.Append(t ^ secretKey);
+            }
+
+            return res.ToString();
+        }
+
     }
 }
