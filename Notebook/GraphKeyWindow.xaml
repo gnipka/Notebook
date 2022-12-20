@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notebook"
         mc:Ignorable="d"
-        Title="GraphKeyWindow" Height="450" Width="800" MaxWidth="800" MinWidth="800" MaxHeight="450" MinHeight="450">
+        Title="Ввод графического ключа" Height="450" Width="800" MaxWidth="800" MinWidth="800" MaxHeight="450" MinHeight="450"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

@@ -11,7 +11,6 @@ namespace Notebook
         public KeyboardWindow()
         {
             InitializeComponent();
-            DataContext = new KeyboardViewModel();
         }
     }
 }

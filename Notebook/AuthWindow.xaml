@@ -22,7 +22,7 @@
                 <TextBlock HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignHeadline2TextBlock}" Foreground="LightBlue">Авторизация</TextBlock>
                 <TextBox Margin="0 20 0 0" materialDesign:HintAssist.Hint="Введите логин" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Foreground="LightBlue" Text="{Binding Login}"></TextBox>
                 <PasswordBox materialDesign:HintAssist.Hint="Введите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Foreground="LightBlue" PasswordChanged="PasswordBox_OnPasswordChanged"></PasswordBox>
-                <Button Foreground="LightBlue" Style="{DynamicResource  MaterialDesignFlatSecondaryButton}">Забыли пароль?</Button>
+                <Button Foreground="LightBlue" Style="{DynamicResource  MaterialDesignFlatSecondaryButton}" Command="{Binding ForgotPassword}">Забыли пароль?</Button>
                 
                 <Grid Margin="0 40 0 0">
                     <Grid.ColumnDefinitions>

@@ -44,8 +44,9 @@ namespace Notebook.Models
         public ICollection<GraphKeyPoint> GraphKeyPoints { get; set; }
 
         /// <summary>
-        /// Записи данного пользователя 
+        /// Запись данного пользователя 
         /// </summary>
-        public ICollection<Note> Notes { get; set; }
+        public int NoteId { get; set; }
+        public Note Note { get; set; }
     }
 }

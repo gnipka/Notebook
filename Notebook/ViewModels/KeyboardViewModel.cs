@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using Notebook.Models;
 using WPF_MVVM_Classes;
 
 namespace Notebook.ViewModels
@@ -16,10 +17,14 @@ namespace Notebook.ViewModels
 
     internal class KeyboardViewModel : ViewModelBase, IDataErrorInfo
     {
+        private readonly string _login;
+        private readonly User _user;
+
         #region Constructor
 
-        public KeyboardViewModel()
+        public KeyboardViewModel(string login) // логин пользователя для которого вводим клавиатурный почерк
         {
+            _login = login;
             LeftBord = 3;
             RightBord = 10;
             CountRepeat = 5;

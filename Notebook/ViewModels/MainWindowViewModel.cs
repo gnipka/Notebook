@@ -21,6 +21,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IRepository<User> _userRepository;
     private readonly ApplicationContext _context;
     private string _image;
+    private string _userNote;
 
     private IEnumerable<XYPoint> _arrayOfPoints;
     
@@ -34,6 +35,7 @@ public class MainWindowViewModel : ViewModelBase
         _userRepository = userRepository;
         _context = context;
         Image = user.PathToImage;
+        UserNote = user.Note.NoteText;
     }
 
     #endregion
@@ -60,9 +62,33 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public string UserNote
+    {
+        get => _userNote;
+        set
+        {
+            _userNote = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion
 
     #region Commands
+
+    public RelayCommand SaveNoteCommand
+    {
+        get
+        {
+            return new RelayCommand(async command =>
+            {
+                _user.Note.NoteText = _userNote;
+                await _userRepository.SaveAsync(_user);
+
+                MessageBox.Show("Записи сохранены");
+
+            });
+        }
+    }
 
     public RelayCommand ChooseImage
     {
@@ -87,35 +113,43 @@ public class MainWindowViewModel : ViewModelBase
         {
             return new RelayCommand(async command =>
             {
-                //удаляем уже существующие точки графического ключа у данного пользователя
-                var graphKeys = _context.GraphKeyPoints.Where(x => x.UserId == _user.Id).ToList();
-                foreach (var graphKey in graphKeys)
+                if (ArrayOfPoints.Count() > 0)
                 {
-                    _context.GraphKeyPoints.Remove(graphKey);
-                }
-
-                _user.PathToImage = Image;
-                _user.HasGraphKey = true;
-                _user.GraphKeyPoints = new List<GraphKeyPoint>();
-                var i = 0;
-                foreach (var point in ArrayOfPoints)
-                {
-                    var graphKeyPoint = new GraphKeyPoint
+                    //удаляем уже существующие точки графического ключа у данного пользователя
+                    var graphKeys = _context.GraphKeyPoints.Where(x => x.UserId == _user.Id).ToList();
+                    foreach (var graphKey in graphKeys)
                     {
-                        NumberOfPoint = i,
-                        User = _user,
-                        UserId = _user.Id,
-                        Delta = 10, // пока пусть 10)
-                        XValue = point.X,
-                        YValue = point.Y,
-                    };
-                    i++;
-                    _user.GraphKeyPoints.Add(graphKeyPoint);
+                        _context.GraphKeyPoints.Remove(graphKey);
+                    }
+
+                    _user.PathToImage = Image;
+                    _user.HasGraphKey = true;
+                    _user.GraphKeyPoints = new List<GraphKeyPoint>();
+                    var i = 0;
+                    foreach (var point in ArrayOfPoints)
+                    {
+                        var graphKeyPoint = new GraphKeyPoint
+                        {
+                            NumberOfPoint = i,
+                            User = _user,
+                            UserId = _user.Id,
+                            Delta = 10, // пока пусть 10)
+                            XValue = point.X,
+                            YValue = point.Y,
+                        };
+                        i++;
+                        _user.GraphKeyPoints.Add(graphKeyPoint);
+                    }
+
+                    await _userRepository.SaveAsync(_user);
+
+                    MessageBox.Show("Графический ключ установлен");
                 }
-
-                await _userRepository.SaveAsync(_user);
-
-                MessageBox.Show("Графический ключ установлен");
+                else
+                {
+                    MessageBox.Show("Вы не ввели графический ключ");
+                }
+                
             });
         }
     }

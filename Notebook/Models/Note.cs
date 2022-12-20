@@ -32,7 +32,6 @@ namespace Notebook.Models
         /// <summary>
         /// Идентификатор пользователя-автора записи
         /// </summary>
-        public int UserId { get; set; }
         public User User { get; set; }
     }
 }

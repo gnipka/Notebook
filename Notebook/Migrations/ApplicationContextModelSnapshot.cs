@@ -70,14 +70,18 @@ namespace Notebook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Notes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateCreated = new DateTime(2022, 12, 21, 0, 14, 55, 467, DateTimeKind.Local).AddTicks(4587),
+                            DateUpdated = new DateTime(2022, 12, 21, 0, 14, 55, 467, DateTimeKind.Local).AddTicks(4588),
+                            NoteText = ""
+                        });
                 });
 
             modelBuilder.Entity("Notebook.Models.User", b =>
@@ -94,6 +98,9 @@ namespace Notebook.Migrations
                     b.Property<bool>("HasGraphKey")
                         .HasColumnType("bit");
 
+                    b.Property<int>("NoteId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -108,14 +115,18 @@ namespace Notebook.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NoteId")
+                        .IsUnique();
+
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DateRegister = new DateTime(2022, 12, 20, 22, 43, 10, 703, DateTimeKind.Local).AddTicks(4364),
+                            DateRegister = new DateTime(2022, 12, 21, 0, 14, 55, 467, DateTimeKind.Local).AddTicks(4682),
                             HasGraphKey = false,
+                            NoteId = 1,
                             Password = "\\u001e\\u000f\\u001d\\u001d\\u0019\\u0001\\u001c\\n",
                             PathToImage = "",
                             Username = "login"
@@ -133,22 +144,26 @@ namespace Notebook.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Notebook.Models.Note", b =>
+            modelBuilder.Entity("Notebook.Models.User", b =>
                 {
-                    b.HasOne("Notebook.Models.User", "User")
-                        .WithMany("Notes")
-                        .HasForeignKey("UserId")
+                    b.HasOne("Notebook.Models.Note", "Note")
+                        .WithOne("User")
+                        .HasForeignKey("Notebook.Models.User", "NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Note");
+                });
+
+            modelBuilder.Entity("Notebook.Models.Note", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Notebook.Models.User", b =>
                 {
                     b.Navigation("GraphKeyPoints");
-
-                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

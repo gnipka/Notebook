@@ -5,13 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notebook"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="800"
+        Title="Блокнот" Height="490" Width="800" MaxHeight="490"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}">
     <Grid>
         <TabControl>
             <TabItem Header="Блокнот">
-                Какие-то записи пользователя
+                <StackPanel>
+                    <TextBox 
+                        Padding="10"
+                        FontSize="16"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        VerticalScrollBarVisibility="Visible"
+                        Height="350" Text="{Binding UserNote}"></TextBox>
+                    <Button Width="250" Margin="10" Command="{Binding SaveNoteCommand}">Сохранить</Button>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Клавиатурный почерк">
                 Создание и настройка клавиатурного почерка пользователя

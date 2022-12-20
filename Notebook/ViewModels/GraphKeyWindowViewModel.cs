@@ -76,19 +76,27 @@ public class GraphKeyWindowViewModel : ViewModelBase
         {
             return new RelayCommand(command =>
             {
-                if (CheckGraphKeys())
+                if (ArrayOfPoints.Count > 0)
                 {
-                    var window = new MainWindow();
-                    var vm = new MainWindowViewModel(_user, _userRepository, _context);
-                    window.DataContext = vm;
-                    window.Show();
+                    if (CheckGraphKeys())
+                    {
+                        var window = new MainWindow();
+                        var vm = new MainWindowViewModel(_user, _userRepository, _context);
+                        window.DataContext = vm;
+                        window.Show();
 
-                    _thisWindow.Close();
+                        _thisWindow.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Графический ключ введен неверно!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Введеный графический ключ неверен!");
+                    MessageBox.Show("Вы не ввели графический ключ");
                 }
+                
             });
         }
     }
@@ -131,10 +139,8 @@ public class GraphKeyWindowViewModel : ViewModelBase
             {
                 return false;
             }
-            
         }
         return true;
-
     }
 
     #endregion

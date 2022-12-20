@@ -24,6 +24,14 @@ namespace Notebook.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Note>().HasData(new Note
+            {
+                Id = 1,
+                NoteText = "",
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now,
+            });
+
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -33,9 +41,12 @@ namespace Notebook.Domain
                     GraphKeyPoints = null,
                     PathToImage = "",
                     DateRegister = DateTime.Now,
-                    Notes = null,
+                    Note = null,
+                    NoteId = 1,
                     HasGraphKey = false,
                 });
+
+            
         }
 
         public virtual DbSet<User> Users { get; set; }

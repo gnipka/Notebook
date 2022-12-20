@@ -80,12 +80,35 @@ namespace Notebook.ViewModels
                             window.Show();
                         }
                         
-                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                        Application.Current.MainWindow.Close();
                     }
                     else
                     {
                         //Авторизация не пройдена
+                        MessageBox.Show("Логин и/или пароль указаны неверно");
                     }
+                });
+            }
+        }
+
+        public RelayCommand ForgotPassword
+        {
+            get
+            {
+                return new RelayCommand(command =>
+                {
+                    if (!string.IsNullOrWhiteSpace(Login))
+                    {
+                        var window = new KeyboardWindow();
+                        var vm = new KeyboardViewModel(Login);
+                        window.DataContext = vm;
+                        window.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Укажите логин");
+                    }
+                   
                 });
             }
         }
