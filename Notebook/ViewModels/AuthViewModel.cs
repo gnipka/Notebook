@@ -62,6 +62,18 @@ namespace Notebook.ViewModels
             {
                 return new RelayCommand(async command =>
                 {
+                    if(string.IsNullOrWhiteSpace(Login))
+                    {
+                        MessageBox.Show("Вы не ввели логин");
+                        return;
+                    }
+
+                    if(string.IsNullOrWhiteSpace(Pass))
+                    {
+                        MessageBox.Show("Вы не ввели пароль");
+                        return;
+                    } 
+
                     var user = await _userRepository.VerifyUserAsync(Login, Pass);
                     if (user != null)
                     {
