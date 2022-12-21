@@ -20,6 +20,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly User _user;
     private readonly IRepository<User> _userRepository;
     private readonly ApplicationContext _context;
+    private readonly Window _thisWindow;
     private string _image;
     private string _userNote;
 
@@ -29,11 +30,12 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Constructors
 
-    public MainWindowViewModel(User user, IRepository<User> userRepository, ApplicationContext context)
+    public MainWindowViewModel(User user, IRepository<User> userRepository, ApplicationContext context, Window thisWindow)
     {
         _user = user;
         _userRepository = userRepository;
         _context = context;
+        _thisWindow = thisWindow;
         Image = user.PathToImage;
         UserNote = user.Note.NoteText;
     }
@@ -82,6 +84,8 @@ public class MainWindowViewModel : ViewModelBase
             return new RelayCommand(async command =>
             {
                 _user.Note.NoteText = _userNote;
+                _user.Note.DateUpdated = DateTime.Now;
+                
                 await _userRepository.SaveAsync(_user);
 
                 MessageBox.Show("Записи сохранены");
@@ -154,6 +158,21 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public RelayCommand LogoutCommand
+    {
+        get
+        {
+            return new RelayCommand(command =>
+            {
+                var window = new AuthWindow();
+                var vm = new AuthViewModel(_userRepository, _context, window);
+                window.DataContext = vm;
+                window.Show();
+
+                _thisWindow.Close();
+            });
+        }
+    }
     #endregion
 
     #region Functions

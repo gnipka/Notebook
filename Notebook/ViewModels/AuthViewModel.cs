@@ -14,13 +14,13 @@ namespace Notebook.ViewModels
 {
     internal class AuthViewModel : ViewModelBase
     {
-        private readonly IRepository<User> _userRepository;
-        private readonly ApplicationContext _context;
-
         #region Variables
 
         private string _login;
         private string _pass;
+        private readonly IRepository<User> _userRepository;
+        private readonly ApplicationContext _context;
+        private readonly Window _authWindow;
 
         #endregion
 
@@ -48,10 +48,11 @@ namespace Notebook.ViewModels
 
         #endregion
 
-        public AuthViewModel(IRepository<User> userRepository, ApplicationContext context)
+        public AuthViewModel(IRepository<User> userRepository, ApplicationContext context, Window authWindow)
         {
             _userRepository = userRepository;
             _context = context;
+            _authWindow = authWindow;
         }
 
         #region Commands
@@ -62,17 +63,17 @@ namespace Notebook.ViewModels
             {
                 return new RelayCommand(async command =>
                 {
-                    if(string.IsNullOrWhiteSpace(Login))
+                    if (string.IsNullOrWhiteSpace(Login))
                     {
                         MessageBox.Show("Вы не ввели логин");
                         return;
                     }
 
-                    if(string.IsNullOrWhiteSpace(Pass))
+                    if (string.IsNullOrWhiteSpace(Pass))
                     {
                         MessageBox.Show("Вы не ввели пароль");
                         return;
-                    } 
+                    }
 
                     var user = await _userRepository.VerifyUserAsync(Login, Pass);
                     if (user != null)
@@ -87,12 +88,12 @@ namespace Notebook.ViewModels
                         else
                         {
                             var window = new MainWindow();
-                            var vm = new MainWindowViewModel(user, _userRepository, _context);
+                            var vm = new MainWindowViewModel(user, _userRepository, _context, window);
                             window.DataContext = vm;
                             window.Show();
                         }
-                        
-                        Application.Current.MainWindow.Close();
+
+                        _authWindow.Close();
                     }
                     else
                     {
@@ -115,16 +116,33 @@ namespace Notebook.ViewModels
                         var vm = new KeyboardViewModel(Login);
                         window.DataContext = vm;
                         window.Show();
+
+                        _authWindow.Close();
                     }
                     else
                     {
                         MessageBox.Show("Укажите логин");
                     }
-                   
+
                 });
             }
         }
 
+        public RelayCommand RegistrationCommand
+        {
+            get
+            {
+                return new RelayCommand(command =>
+                {
+                    var window = new RegistrationWindow();
+                    var vm = new RegistrationWindowViewModel(_userRepository, _context, window);
+                    window.DataContext = vm;
+                    window.Show();
+
+                    _authWindow.Close();
+                });
+            }
+        }
         #endregion
     }
 }

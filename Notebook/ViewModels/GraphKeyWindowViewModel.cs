@@ -81,7 +81,7 @@ public class GraphKeyWindowViewModel : ViewModelBase
                     if (CheckGraphKeys())
                     {
                         var window = new MainWindow();
-                        var vm = new MainWindowViewModel(_user, _userRepository, _context);
+                        var vm = new MainWindowViewModel(_user, _userRepository, _context, window);
                         window.DataContext = vm;
                         window.Show();
 

@@ -34,7 +34,13 @@ namespace Notebook.Data.Implemetion
             return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.Note).FirstAsync(m => m.Id == id);
         }
 
-        public async Task<User?> VerifyUserAsync(string username, string password)
+        public async Task<User?> GetByLoginAsync(string login)
+        {
+            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.Note).FirstOrDefaultAsync(m => m.Username == login);
+
+        }
+
+        public Task<User?> VerifyUserAsync(string username, string password)
         {
             var passwordEncode = Cipher(password, "n");
             var value = _context.Users
@@ -42,7 +48,7 @@ namespace Notebook.Data.Implemetion
                 .Include(x => x.Note)
                 .ToList()
                 .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
-            return value;
+            return Task.FromResult(value);
         }
 
         public async Task<bool> SaveAsync(User user)

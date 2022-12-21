@@ -17,9 +17,6 @@ namespace Notebook.ViewModels
 
     internal class KeyboardViewModel : ViewModelBase, IDataErrorInfo
     {
-        private readonly string _login;
-        private readonly User _user;
-
         #region Constructor
 
         public KeyboardViewModel(string login) // логин пользователя для которого вводим клавиатурный почерк
@@ -47,6 +44,9 @@ namespace Notebook.ViewModels
         private int _counterPhrase;
         private string _formatterPhrase;
         private List<Cell> _table = new List<Cell>();
+
+        private readonly string _login;
+        private readonly User _user;
         #endregion
 
         #region Properties

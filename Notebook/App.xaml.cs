@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac.Core;
 using Notebook.Data.Abstract;
 using Notebook.Data.Implemetion;
 using Notebook.Domain;
@@ -24,10 +25,11 @@ namespace Notebook
             var builder = new ContainerBuilder();
             builder.RegisterType<ApplicationContext>().AsSelf();
             builder.RegisterType<EFUserRepository>().As<IRepository<User>>();
-            builder.RegisterType<AuthViewModel>().AsSelf();
+            var authWindow = new AuthWindow();
+            builder.RegisterType<AuthViewModel>().AsSelf().WithParameter("authWindow", authWindow);
             var container = builder.Build();
             var authViewModel = container.Resolve<AuthViewModel>();
-            var authWindow = new AuthWindow{ DataContext = authViewModel };
+            authWindow.DataContext = authViewModel;
             authWindow.Show();
         }
     }

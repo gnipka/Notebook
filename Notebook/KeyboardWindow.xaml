@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="Вход по клавиатурному подчерку" Height="480" Width="800">
+        Title="Вход по клавиатурному подчерку" Height="480" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Style.Triggers>

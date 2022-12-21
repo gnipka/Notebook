@@ -23,5 +23,11 @@ namespace Notebook
         {
             InitializeComponent();
         }
+
+        private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            //это позволяет передать пароль во viewModel
+            ((dynamic)this.DataContext).Pass = ((PasswordBox)sender).Password;
+        }
     }
 }
