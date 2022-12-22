@@ -34,6 +34,21 @@ namespace Notebook.Models
         public bool HasGraphKey { get; set; }
 
         /// <summary>
+        /// Есть ли у пользователя вход по клавиатурному подчерку
+        /// </summary>
+        public bool HasKeyboard { get; set; }
+
+        /// <summary>
+        /// Кодовая фраза для клавиатурного подчерка
+        /// </summary>
+        public string CodePhrase { get; set; }
+
+        /// <summary>
+        /// Погрешность клавиатурного подчерка
+        /// </summary>
+        public int ErrorRate { get; set; }
+
+        /// <summary>
         /// Путь к картинке для графического ключа
         /// </summary>
         public string PathToImage { get; set; }
@@ -42,6 +57,11 @@ namespace Notebook.Models
         /// Точки графического ключа данного пользователя 
         /// </summary>
         public ICollection<GraphKeyPoint> GraphKeyPoints { get; set; }
+
+        /// <summary>
+        /// Символы фразы данного пользователя
+        /// </summary>
+        public ICollection<KeyboardPoint> KeyboardPoints { get; set; }
 
         /// <summary>
         /// Запись данного пользователя 

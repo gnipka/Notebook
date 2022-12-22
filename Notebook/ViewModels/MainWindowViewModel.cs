@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,24 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Window _thisWindow;
     private string _image;
     private string _userNote;
+
+    private string _phrase = "";
+    private string _phraseChecker;
+    private int _leftBord = 3;
+    private int _rightBord = 10;
+    private int _countRepeat = 5;
+    private bool _run;
+    private bool _readOnly = true;
+    private Stopwatch _sw;
+    private long _time;
+    private char _currentCharPhrase;
+    private int _counterChar;
+    private int _counterPhrase;
+    private string _formatterPhrase;
+    private List<Cell> _table = new List<Cell>();
+    private int _errorRate = 30;
+    private bool _addKeyboard = false;
+    private List<KeyboardPoint> _keyboardPoints;
 
     private IEnumerable<XYPoint> _arrayOfPoints;
     
@@ -70,6 +89,137 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _userNote = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Phrase
+    {
+        get { return _phrase; }
+        set
+        {
+            _phrase = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ErrorRate
+    {
+        get { return _errorRate; }
+        set
+        {
+            _errorRate = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string PhraseChecker
+    {
+        get { return _phraseChecker; }
+        set
+        {
+            _phraseChecker = value;
+
+
+            if (_phraseChecker.Substring(_phraseChecker.Length - 1) != "\n" && _phraseChecker.Substring(_phraseChecker.Length - 1) != "\r")
+            {
+
+                if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
+                {
+                    _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
+                    if (_counterChar == _formatterPhrase.Length - 1)
+                    {
+                        if (_counterPhrase == CountRepeat)
+                        {
+                            _run = false;
+                            _addKeyboard = true;
+                            MessageBox.Show("Ввод законечен");
+
+                        }
+                        else
+                        {
+                            _counterChar = 0;
+                            _currentCharPhrase = _formatterPhrase[_counterChar];
+                            _counterPhrase++;
+                        }
+                    }
+                    else
+                    {
+                        _counterChar++;
+                        _currentCharPhrase = _formatterPhrase[_counterChar];
+                    }
+
+                }
+                else
+                {
+                    _run = false;
+                    Time = 0;
+                    ReadOnly = true;
+                    _phraseChecker = String.Empty;
+                    MessageBox.Show("Ошибка при вводе фразы. Необходимо начать заново :(");
+                }
+            }
+
+            OnPropertyChanged();
+        }
+    }
+
+    public Stopwatch Sw
+    {
+        get { return _sw; }
+        set
+        {
+            _sw = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool ReadOnly
+    {
+        get { return _readOnly; }
+        set
+        {
+            _readOnly = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public long Time
+    {
+        get { return _time; }
+        set
+        {
+            _time = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int LeftBord
+    {
+        get { return _leftBord; }
+        set
+        {
+            _leftBord = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int RightBord
+    {
+        get { return _rightBord; }
+        set
+        {
+            _rightBord = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int CountRepeat
+    {
+        get { return _countRepeat; }
+        set
+        {
+            _countRepeat = value;
             OnPropertyChanged();
         }
     }
@@ -173,11 +323,141 @@ public class MainWindowViewModel : ViewModelBase
             });
         }
     }
+
+    private RelayCommand _checkPhrase;
+    public RelayCommand CheckPhrase
+    {
+        get
+        {
+            return _checkPhrase ??= new RelayCommand(async x =>
+            {
+                if (Phrase != "")
+                {
+                    Time = 0;
+                    _phraseChecker = String.Empty;
+                    _counterChar = 0;
+                    _counterPhrase = 1;
+                    _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
+                    _run = true; // ставим метку для таймера
+                    _formatterPhrase = Phrase;
+                    ReadOnly = false;
+                    StartTimer(); // запускаем таймер
+                }
+                else
+                {
+                    MessageBox.Show("Введите фразу");
+                }
+            });
+        }
+    }
+
+    private RelayCommand _saveKeyboard;
+    public RelayCommand SaveKeyboard
+    {
+        get
+        {
+            return _saveKeyboard ??= new RelayCommand(async x =>
+            {
+                //удаляем уже существующие точки графического ключа у данного пользователя
+                if (_addKeyboard)
+                {
+                    var keyboardPred = _context.KeyboardPoints.Where(x => x.UserId == _user.Id).ToList();
+                                        
+                    foreach (var item in keyboardPred)
+                    {
+
+                        _context.KeyboardPoints.Remove(item);
+                    }
+
+                    _user.CodePhrase = Phrase;
+                    _user.HasKeyboard = true;
+                    _user.KeyboardPoints = new List<KeyboardPoint>();
+                    _user.ErrorRate = ErrorRate;
+
+                    for (int i = 0; i < Phrase.Length; i++)
+                    {
+                        var times = _table.Where(x => x.Number == i).ToList();
+                        times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
+                        times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
+                        var mean = times.Average(x => x.Time);
+
+                        var keyboardPoint = new KeyboardPoint
+                        {
+                            Symbol = Phrase[i],
+                            Time = (long)mean,
+                            LeftLimit = (long)mean - (long)mean * ErrorRate / 100,
+                            RightLimit = (long)mean + (long)mean * ErrorRate / 100,
+                            NumberOfChar = i,
+                            User = _user,
+                            UserId = _user.Id
+                        };
+
+                        _user.KeyboardPoints.Add(keyboardPoint);
+
+                    }
+
+                    await _userRepository.SaveAsync(_user);
+
+                    MessageBox.Show("Вход по клавиатурному подчерку добавлен");
+                }
+                else
+                    MessageBox.Show("Данные для сохранения отсутствуют");
+            });
+        }
+    }
+
+    public RelayCommand Plot
+    {
+        get
+        {
+            return new RelayCommand(command =>
+            {
+                var window = new PlotKeyboardWindow();
+                _keyboardPoints = new List<KeyboardPoint>();
+                for (int i = 0; i < Phrase.Length; i++)
+                {
+                    var times = _table.Where(x => x.Number == i).ToList();
+                    times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
+                    times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
+                    var mean = times.Average(x => x.Time);
+
+                    var keyboardPoint = new KeyboardPoint
+                    {
+                        Symbol = Phrase[i],
+                        Time = (long)mean,
+                        LeftLimit = (long)mean - (long)mean * ErrorRate / 100,
+                        RightLimit = (long)mean + (long)mean * ErrorRate / 100,
+                        NumberOfChar = i,
+                        User = _user,
+                        UserId = _user.Id
+                    };
+
+                    _keyboardPoints.Add(keyboardPoint);
+
+                }
+
+                var vm = new PlotKeyboardViewModel(_keyboardPoints);
+                window.DataContext = vm;
+                window.Show();
+            });
+        }
+    }
     #endregion
 
     #region Functions
 
-
+    async void StartTimer()
+    {
+        await Task.Run(() =>
+        {
+            Sw = Stopwatch.StartNew();
+            while (_run)
+            {
+                Time = _sw.ElapsedMilliseconds / 1000;
+            }
+            Sw.Stop();
+        });
+    }
 
     #endregion
 }

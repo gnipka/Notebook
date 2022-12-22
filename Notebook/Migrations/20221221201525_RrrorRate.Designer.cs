@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221221201525_RrrorRate")]
+    partial class RrrorRate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,14 +62,8 @@ namespace Notebook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<long>("LeftLimit")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("NumberOfChar")
                         .HasColumnType("int");
-
-                    b.Property<long>("RightLimit")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
@@ -112,8 +108,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2237),
-                            DateUpdated = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2239),
+                            DateCreated = new DateTime(2022, 12, 21, 23, 15, 24, 642, DateTimeKind.Local).AddTicks(1737),
+                            DateUpdated = new DateTime(2022, 12, 21, 23, 15, 24, 642, DateTimeKind.Local).AddTicks(1738),
                             NoteText = ""
                         });
                 });
@@ -169,7 +165,7 @@ namespace Notebook.Migrations
                         {
                             Id = 1,
                             CodePhrase = "",
-                            DateRegister = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2603),
+                            DateRegister = new DateTime(2022, 12, 21, 23, 15, 24, 642, DateTimeKind.Local).AddTicks(2016),
                             ErrorRate = 0,
                             HasGraphKey = false,
                             HasKeyboard = false,

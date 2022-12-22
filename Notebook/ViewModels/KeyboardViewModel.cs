@@ -2,25 +2,33 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Notebook.Data.Abstract;
+using Notebook.Domain;
 using Notebook.Models;
 using WPF_MVVM_Classes;
 
 namespace Notebook.ViewModels
 {
-    class Cell
+    public class Cell
     {
         public char Symbol { get; set; }
         public long Time { get; set; }
+        public int Number { get; set; }
     }
 
-    internal class KeyboardViewModel : ViewModelBase, IDataErrorInfo
+    internal class KeyboardViewModel : ViewModelBase
     {
         #region Constructor
 
-        public KeyboardViewModel(string login) // логин пользователя для которого вводим клавиатурный почерк
+        public KeyboardViewModel(string login, User user, IRepository<User> userRepository, ApplicationContext context, Window thisWindow)
         {
+            _user = user;
+            _userRepository = userRepository;
+            _context = context;
+            _thisWindow = thisWindow;
             _login = login;
             LeftBord = 3;
             RightBord = 10;
@@ -32,7 +40,7 @@ namespace Notebook.ViewModels
         #region Variables
         private string _phrase;
         private string _phraseChecker;
-        private int _leftBord; 
+        private int _leftBord;
         private int _rightBord;
         private int _countRepeat;
         private bool _run;
@@ -47,6 +55,9 @@ namespace Notebook.ViewModels
 
         private readonly string _login;
         private readonly User _user;
+        private readonly IRepository<User> _userRepository;
+        private readonly ApplicationContext _context;
+        private readonly Window _thisWindow;
         #endregion
 
         #region Properties
@@ -67,21 +78,43 @@ namespace Notebook.ViewModels
             {
                 _phraseChecker = value;
 
-
                 if (_phraseChecker.Substring(_phraseChecker.Length - 1) != "\n" && _phraseChecker.Substring(_phraseChecker.Length - 1) != "\r")
                 {
 
                     if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
                     {
-                        _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds });
+                        _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
                         if (_counterChar == _formatterPhrase.Length - 1)
                         {
                             if (_counterPhrase == CountRepeat)
                             {
                                 _run = false;
-                                // вызываем окно ежедневника
-                                MessageBox.Show("OK");
 
+                                for (int i = 0; i < Phrase.Length; i++)
+                                {
+                                    var times = _table.FindAll(x => x.Number == i);
+                                    times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
+                                    times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
+                                    var mean = times.Average(x => x.Time);
+
+                                    var keyboard = _user.KeyboardPoints.First(x => x.NumberOfChar == i);
+
+                                    if (keyboard.LeftLimit > mean || keyboard.RightLimit < mean)
+                                    {
+                                        MessageBox.Show("Доступ запрещен");
+                                        _run = false;
+                                        Time = 0;
+                                        ReadOnly = true;
+                                        _phraseChecker = String.Empty;
+                                        return;
+                                    }
+                                }
+                                var window = new MainWindow();
+                                var vm = new MainWindowViewModel(_user, _userRepository, _context, window);
+                                window.DataContext = vm;
+                                window.Show();
+
+                                _thisWindow.Close();
                             }
                             else
                             {
@@ -116,7 +149,7 @@ namespace Notebook.ViewModels
             get { return _sw; }
             set
             {
-                _sw = value;                
+                _sw = value;
                 OnPropertyChanged();
             }
         }
@@ -160,7 +193,7 @@ namespace Notebook.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public int CountRepeat
         {
             get { return _countRepeat; }
@@ -172,33 +205,13 @@ namespace Notebook.ViewModels
         }
         #endregion
 
-        #region ExceptionRule
-        public string Error => throw new NotImplementedException();
-
-        public string this[string columnName]
-        {
-            get 
-            {
-                string error = String.Empty;
-
-                switch (columnName)
-                {
-                    case "CountRepeat":
-                        if (CountRepeat > RightBord || CountRepeat < LeftBord)
-                            error = $"Число повторов должно быть в диапазоне [{LeftBord};{RightBord}]";
-                        break;
-                }
-                return error;
-            }
-        }
-        #endregion
-
         async void StartTimer()
         {
             await Task.Run(() =>
             {
                 Sw = Stopwatch.StartNew();
-                while (_run) {
+                while (_run)
+                {
                     Time = _sw.ElapsedMilliseconds / 1000;
                 }
                 Sw.Stop();
@@ -212,14 +225,41 @@ namespace Notebook.ViewModels
             {
                 return _checkPhrase ??= new RelayCommand(async x =>
                 {
-                    // добавить проверку фразы из бд
-                    _counterChar = 0;
-                    _counterPhrase = 1;
-                    _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
-                    _run = true; // ставим метку для таймера
-                    _formatterPhrase = Phrase;
-                    ReadOnly = false;
-                    StartTimer(); // запускаем таймер
+                    if (CountRepeat < RightBord && CountRepeat > LeftBord)
+                    {
+                        if (Phrase.Trim() == _user.CodePhrase)
+                        {
+                            // добавить проверку фразы из бд
+                            _counterChar = 0;
+                            _counterPhrase = 1;
+                            _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
+                            _run = true; // ставим метку для таймера
+                            _formatterPhrase = Phrase;
+                            var a = _user.KeyboardPoints;
+                            ReadOnly = false;
+                            StartTimer(); // запускаем таймер
+                        }
+                        else
+                            MessageBox.Show("Фраза введена неверно");
+                    }
+                    else
+                        MessageBox.Show("Проверьте корректность количества повторов");
+                });
+            }
+        }
+
+        public RelayCommand LogoutCommand
+        {
+            get
+            {
+                return new RelayCommand(command =>
+                {
+                    var window = new AuthWindow();
+                    var vm = new AuthViewModel(_userRepository, _context, window);
+                    window.DataContext = vm;
+                    window.Show();
+
+                    _thisWindow.Close();
                 });
             }
         }

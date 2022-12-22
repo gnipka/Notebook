@@ -25,18 +25,19 @@ namespace Notebook.Data.Implemetion
         {
             return _context.Users
                 .Include(x => x.GraphKeyPoints)
+                .Include(x => x.KeyboardPoints)
                 .Include(x => x.Note)
                 .ToList();
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.Note).FirstAsync(m => m.Id == id);
+            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.KeyboardPoints).Include(x => x.Note).FirstAsync(m => m.Id == id);
         }
 
         public async Task<User?> GetByLoginAsync(string login)
         {
-            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.Note).FirstOrDefaultAsync(m => m.Username == login);
+            return await _context.Users.Include(x => x.GraphKeyPoints).Include(x => x.KeyboardPoints).Include(x => x.Note).FirstOrDefaultAsync(m => m.Username == login);
 
         }
 
@@ -45,6 +46,7 @@ namespace Notebook.Data.Implemetion
             var passwordEncode = Cipher(password, "n");
             var value = _context.Users
                 .Include(x => x.GraphKeyPoints)
+                .Include(x => x.KeyboardPoints)
                 .Include(x => x.Note)
                 .ToList()
                 .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
@@ -68,6 +70,9 @@ namespace Notebook.Data.Implemetion
                         dbEntry.PathToImage = user.PathToImage;
                         dbEntry.HasGraphKey = user.HasGraphKey;
                         dbEntry.GraphKeyPoints = user.GraphKeyPoints;
+                        dbEntry.KeyboardPoints = user.KeyboardPoints;
+                        dbEntry.CodePhrase = user.CodePhrase;
+                        dbEntry.HasKeyboard = user.HasKeyboard;                  
                         dbEntry.Note = user.Note;
                     }
                 }

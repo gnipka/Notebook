@@ -4,27 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib" 
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Notebook"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Title="Вход по клавиатурному подчерку" Height="480" Width="800" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
+    <!--<Window.Resources>
         <Style TargetType="TextBox">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="ToolTip"
-                Value="{Binding RelativeSource={RelativeSource Self},
-                    Path=(Validation.Errors)[0].ErrorContent}" />
-                    <Setter Property="Foreground" Value="Red" />
+                    <Setter Property="Foreground" Value="Red"  />
                 </Trigger>
             </Style.Triggers>
         </Style>
-    </Window.Resources>
+    </Window.Resources>-->
+    
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel>
+        <Menu Grid.Row="0" Height="30">
+            <MenuItem Header="Назад" Height="30" Padding="5" FontSize="12" Command="{Binding LogoutCommand}"></MenuItem>
+        </Menu>
+        
+        <StackPanel Grid.Row="1">
             <TextBlock Margin="20 0 0 0" Style="{DynamicResource MaterialDesignHeadline4TextBlock}">Вход по клавиатурному подчерку</TextBlock>
 
             <StackPanel Margin="20">
@@ -37,27 +44,15 @@
                 <StackPanel Margin="0 15 0 0" Orientation="Horizontal">
                     <TextBlock Width="210" Margin="0 5 0 0">Количество повторов ввода фразы</TextBlock>
                     <TextBox Text="{Binding LeftBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
-                    <TextBlock Width="20" Margin="0 5 0 0">&lt;=</TextBlock>
-                    <TextBox Width="30" Style="{DynamicResource MaterialDesignTextBoxBase}">
-                        <TextBox.Text>
-                            <Binding Path="CountRepeat"
-                                ValidatesOnExceptions="True" 
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
-                                <Binding.ValidationRules>
-                                    <DataErrorValidationRule ValidationStep="UpdatedValue"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <TextBlock Width="20" Margin="0 5 0 0">&lt;=</TextBlock>
-                    <TextBox Text="{Binding RightBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
+                    <TextBlock Width="20" Margin="5 5 5 0">&lt;=</TextBlock>
+                    <xctk:IntegerUpDown Value="{Binding CountRepeat}" Minimum="{Binding LeftLimit}" Maximum="{Binding RightBord}" Background="{DynamicResource MaterialDesignPaper}"></xctk:IntegerUpDown>
+                    <TextBlock Width="20" Margin="5 5 5 0">&lt;=</TextBlock>
+                    <TextBox Text="{Binding RightBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}" ></TextBox>
                     <TextBlock Width="50" Margin="290 5 0 0">Время</TextBlock>
-                    <TextBox Width="100" Text="{Binding Time}" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
+                    <TextBox Text="{Binding Time}" IsReadOnly="True" Width="100" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
                 </StackPanel>
 
-                <Button Command="{Binding CheckPhrase}" Margin="0 20 0 0">Начать ввод</Button>
+                <Button Command="{Binding CheckPhrase}" Margin="0 20 0 0" Cursor="Hand">Начать ввод</Button>
 
                 <TextBox IsReadOnly="{Binding ReadOnly}" Margin="0 20 0 0" TextWrapping="Wrap" AcceptsReturn="True" Height="200" Style="{DynamicResource MaterialDesignFilledTextBox}" BorderBrush="Transparent">
                     <TextBox.Text>

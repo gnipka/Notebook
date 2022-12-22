@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221221191839_KeyboardUser")]
+    partial class KeyboardUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,40 +54,6 @@ namespace Notebook.Migrations
                     b.ToTable("GraphKeyPoints");
                 });
 
-            modelBuilder.Entity("Notebook.Models.KeyboardPoint", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<long>("LeftLimit")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("NumberOfChar")
-                        .HasColumnType("int");
-
-                    b.Property<long>("RightLimit")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<long>("Time")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("KeyboardPoints");
-                });
-
             modelBuilder.Entity("Notebook.Models.Note", b =>
                 {
                     b.Property<int>("Id")
@@ -112,8 +80,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2237),
-                            DateUpdated = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2239),
+                            DateCreated = new DateTime(2022, 12, 21, 22, 18, 39, 234, DateTimeKind.Local).AddTicks(4866),
+                            DateUpdated = new DateTime(2022, 12, 21, 22, 18, 39, 234, DateTimeKind.Local).AddTicks(4867),
                             NoteText = ""
                         });
                 });
@@ -132,9 +100,6 @@ namespace Notebook.Migrations
 
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("ErrorRate")
-                        .HasColumnType("int");
 
                     b.Property<bool>("HasGraphKey")
                         .HasColumnType("bit");
@@ -169,8 +134,7 @@ namespace Notebook.Migrations
                         {
                             Id = 1,
                             CodePhrase = "",
-                            DateRegister = new DateTime(2022, 12, 22, 12, 6, 25, 816, DateTimeKind.Local).AddTicks(2603),
-                            ErrorRate = 0,
+                            DateRegister = new DateTime(2022, 12, 21, 22, 18, 39, 234, DateTimeKind.Local).AddTicks(5130),
                             HasGraphKey = false,
                             HasKeyboard = false,
                             NoteId = 1,
@@ -184,17 +148,6 @@ namespace Notebook.Migrations
                 {
                     b.HasOne("Notebook.Models.User", "User")
                         .WithMany("GraphKeyPoints")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Notebook.Models.KeyboardPoint", b =>
-                {
-                    b.HasOne("Notebook.Models.User", "User")
-                        .WithMany("KeyboardPoints")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -222,8 +175,6 @@ namespace Notebook.Migrations
             modelBuilder.Entity("Notebook.Models.User", b =>
                 {
                     b.Navigation("GraphKeyPoints");
-
-                    b.Navigation("KeyboardPoints");
                 });
 #pragma warning restore 612, 618
         }

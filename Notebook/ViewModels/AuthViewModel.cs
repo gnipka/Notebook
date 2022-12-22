@@ -108,16 +108,27 @@ namespace Notebook.ViewModels
         {
             get
             {
-                return new RelayCommand(command =>
+                return new RelayCommand(async command =>
                 {
                     if (!string.IsNullOrWhiteSpace(Login))
                     {
-                        var window = new KeyboardWindow();
-                        var vm = new KeyboardViewModel(Login);
-                        window.DataContext = vm;
-                        window.Show();
+                        var user = await _userRepository.GetByLoginAsync(Login);
+                        if (user != null)
+                        {
+                            if (user.HasKeyboard)
+                            {
+                                var window = new KeyboardWindow();
+                                var vm = new KeyboardViewModel(Login, user, _userRepository, _context, window);
+                                window.DataContext = vm;
+                                window.Show();
 
-                        _authWindow.Close();
+                                _authWindow.Close();
+                            }
+                            else
+                                MessageBox.Show("Вход по клавиатрному подчерку не добавлен");
+                        }
+                        else
+                            MessageBox.Show("Логин указан неверно");
                     }
                     else
                     {
