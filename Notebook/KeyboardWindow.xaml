@@ -45,7 +45,7 @@
                     <TextBlock Width="210" Margin="0 5 0 0">Количество повторов ввода фразы</TextBlock>
                     <TextBox Text="{Binding LeftBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
                     <TextBlock Width="20" Margin="5 5 5 0">&lt;=</TextBlock>
-                    <xctk:IntegerUpDown Value="{Binding CountRepeat}" Minimum="{Binding LeftLimit}" Maximum="{Binding RightBord}" Background="{DynamicResource MaterialDesignPaper}"></xctk:IntegerUpDown>
+                    <xctk:IntegerUpDown Value="{Binding CountRepeat}" Foreground="White" Minimum="{Binding LeftBord}" Maximum="{Binding RightBord}" Background="{DynamicResource MaterialDesignPaper}"></xctk:IntegerUpDown>
                     <TextBlock Width="20" Margin="5 5 5 0">&lt;=</TextBlock>
                     <TextBox Text="{Binding RightBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}" ></TextBox>
                     <TextBlock Width="50" Margin="290 5 0 0">Время</TextBlock>

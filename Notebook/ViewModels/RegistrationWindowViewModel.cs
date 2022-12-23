@@ -104,6 +104,10 @@ public class RegistrationWindowViewModel : ViewModelBase
                     HasGraphKey = false,
                     PathToImage = "",
                     NoteId = _context.Notes.First(x => x == note).Id,
+                    HasKeyboard = false,
+                    KeyboardPoints = null,
+                    CodePhrase = "",
+                
                 };
 
                 await _userRepository.SaveAsync(user);

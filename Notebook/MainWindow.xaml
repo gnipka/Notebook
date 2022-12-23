@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Notebook"
         mc:Ignorable="d"
         Title="Блокнот" Height="650" Width="800" MaxHeight="650" MinHeight="650" MaxWidth="800" MinWidth="800"
@@ -41,19 +42,7 @@
                         <TextBlock Width="210" Margin="0 5 0 0">Количество повторов ввода фразы</TextBlock>
                         <TextBox Text="{Binding LeftBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
                         <TextBlock Width="20" Margin="0 5 0 0">&lt;=</TextBlock>
-                        <TextBox Width="30" Style="{DynamicResource MaterialDesignTextBoxBase}">
-                            <TextBox.Text>
-                                <Binding Path="CountRepeat"
-                                ValidatesOnExceptions="True" 
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule ValidationStep="UpdatedValue"/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <xctk:IntegerUpDown Value="{Binding CountRepeat}" Foreground="White" Minimum="{Binding LeftBord}" Maximum="{Binding RightBord}" Background="{DynamicResource MaterialDesignPaper}"></xctk:IntegerUpDown>
                         <TextBlock Width="20" Margin="0 5 0 0">&lt;=</TextBlock>
                         <TextBox Text="{Binding RightBord}" Width="30" IsReadOnly="True" Style="{DynamicResource MaterialDesignTextBoxBase}"></TextBox>
                         <TextBlock Width="50" Margin="290 5 0 0">Время</TextBlock>
@@ -77,9 +66,9 @@
             </TabItem>
             <TabItem Header="Графический ключ">
                 <StackPanel>
-                    <Button Width="200" HorizontalAlignment="Left" Margin="5" Command="{Binding ChooseImage}" >Выбрать картинку</Button>
+                    <Button  Margin="20" Command="{Binding ChooseImage}" >Выбрать картинку</Button>
                     <Image Name="image" MaxWidth="600" MinWidth="600" MaxHeight="300" MinHeight="300" Source="{Binding Image}" MouseLeftButtonDown="Image_OnMouseLeftButtonDown"></Image>
-                    <Button Width="200" HorizontalAlignment="Left" Margin="5" Click="ButtonBase_OnClick" Command="{Binding SaveCommand}">Сохранить</Button>
+                    <Button  Margin="20" Click="ButtonBase_OnClick" Command="{Binding SaveCommand}">Сохранить</Button>
 
                 </StackPanel>
             </TabItem>

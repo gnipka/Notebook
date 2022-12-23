@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Notebook.Data.Abstract;
 using Notebook.Domain;
 using Notebook.Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using WPF_MVVM_Classes;
 
 namespace Notebook.ViewModels;
@@ -41,7 +39,7 @@ public class MainWindowViewModel : ViewModelBase
     private List<Cell> _table = new List<Cell>();
     private int _errorRate = 30;
     private bool _addKeyboard = false;
-    private List<KeyboardPoint> _keyboardPoints;
+    private List<KeyboardPoint> _keyboardPoints = new List<KeyboardPoint>();
 
     private IEnumerable<XYPoint> _arrayOfPoints;
     
@@ -57,6 +55,10 @@ public class MainWindowViewModel : ViewModelBase
         _thisWindow = thisWindow;
         Image = user.PathToImage;
         UserNote = user.Note.NoteText;
+        Phrase = user.CodePhrase;
+        if(user.KeyboardPoints != null)
+            _keyboardPoints = user.KeyboardPoints.ToList();
+        ErrorRate = user.ErrorRate;
     }
 
     #endregion
@@ -133,6 +135,29 @@ public class MainWindowViewModel : ViewModelBase
                         {
                             _run = false;
                             _addKeyboard = true;
+                            _keyboardPoints = new List<KeyboardPoint>();
+                            for (int i = 0; i < Phrase.Length; i++)
+                            {
+                                var times = _table.Where(x => x.Number == i).ToList();
+                                times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
+                                times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
+                                var mean = times.Average(x => x.Time);
+
+                                var keyboardPoint = new KeyboardPoint
+                                {
+                                    Symbol = Phrase[i],
+                                    Time = (long)mean,
+                                    LeftLimit = (long)mean - (long)mean * ErrorRate / 100,
+                                    RightLimit = (long)mean + (long)mean * ErrorRate / 100,
+                                    NumberOfChar = i,
+                                    User = _user,
+                                    UserId = _user.Id
+                                };
+
+                                _keyboardPoints.Add(keyboardPoint);
+
+                            }
+
                             MessageBox.Show("Ввод законечен");
 
                         }
@@ -362,13 +387,13 @@ public class MainWindowViewModel : ViewModelBase
                 if (_addKeyboard)
                 {
                     var keyboardPred = _context.KeyboardPoints.Where(x => x.UserId == _user.Id).ToList();
-                                        
+
                     foreach (var item in keyboardPred)
                     {
 
                         _context.KeyboardPoints.Remove(item);
                     }
-
+                    _keyboardPoints = new List<KeyboardPoint>();
                     _user.CodePhrase = Phrase;
                     _user.HasKeyboard = true;
                     _user.KeyboardPoints = new List<KeyboardPoint>();
@@ -413,29 +438,6 @@ public class MainWindowViewModel : ViewModelBase
             return new RelayCommand(command =>
             {
                 var window = new PlotKeyboardWindow();
-                _keyboardPoints = new List<KeyboardPoint>();
-                for (int i = 0; i < Phrase.Length; i++)
-                {
-                    var times = _table.Where(x => x.Number == i).ToList();
-                    times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
-                    times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
-                    var mean = times.Average(x => x.Time);
-
-                    var keyboardPoint = new KeyboardPoint
-                    {
-                        Symbol = Phrase[i],
-                        Time = (long)mean,
-                        LeftLimit = (long)mean - (long)mean * ErrorRate / 100,
-                        RightLimit = (long)mean + (long)mean * ErrorRate / 100,
-                        NumberOfChar = i,
-                        User = _user,
-                        UserId = _user.Id
-                    };
-
-                    _keyboardPoints.Add(keyboardPoint);
-
-                }
-
                 var vm = new PlotKeyboardViewModel(_keyboardPoints);
                 window.DataContext = vm;
                 window.Show();
