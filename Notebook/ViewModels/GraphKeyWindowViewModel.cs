@@ -16,17 +16,20 @@ namespace Notebook.ViewModels;
 
 public class GraphKeyWindowViewModel : ViewModelBase
 {
-    private readonly User _user;
-    private readonly IRepository<User> _userRepository;
-    private readonly ApplicationContext _context;
-    private readonly Window _thisWindow;
+
 
     #region Variables
 
     private string _image;
     private List<XYPoint> _arrayOfPoints;
     public double _delta;
+    private readonly User _user;
+    private readonly IRepository<User> _userRepository;
+    private readonly ApplicationContext _context;
+    private readonly Window _thisWindow;
 
+    private int _amountOfAttempt;
+    private string _attemptWord;
     #endregion
 
     #region Constructors
@@ -39,7 +42,9 @@ public class GraphKeyWindowViewModel : ViewModelBase
         _thisWindow = thisWindow;
         //var uri = new Uri(user.PathToImage, UriKind.Relative);
         Image = user.PathToImage;
-        _delta = 10;
+        _delta = user.DeltaPixels;
+
+        _amountOfAttempt = user.AmountOfAttempt;
     }
 
     #endregion
@@ -65,7 +70,6 @@ public class GraphKeyWindowViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
-
     #endregion
 
     #region Commands
@@ -89,14 +93,56 @@ public class GraphKeyWindowViewModel : ViewModelBase
                     }
                     else
                     {
-                        MessageBox.Show("Графический ключ введен неверно!");
+                        _amountOfAttempt--;
+                        if (_amountOfAttempt > 0)
+                        {
+                            _attemptWord = _amountOfAttempt switch
+                            {
+                                >= 5 => "попыток",
+                                < 5 and > 1 => "попытки",
+                                1 => "попытка",
+                                _ => _attemptWord
+                            };
+
+                            MessageBox.Show($"Графический ключ введен неверно. Осталось {_amountOfAttempt} {_attemptWord}");
+                        }
+                        else
+                        {
+                            var window = new AuthWindow();
+                            var vm = new AuthViewModel(_userRepository, _context, window);
+                            window.DataContext = vm;
+                            window.Show();
+
+                            _thisWindow.Close();
+                        }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Вы не ввели графический ключ");
+                    _amountOfAttempt--;
+                    if (_amountOfAttempt > 0)
+                    {
+                        _attemptWord = _amountOfAttempt switch
+                        {
+                            >= 5 => "попыток",
+                            < 5 and > 1 => "попытки",
+                            1 => "попытка",
+                            _ => _attemptWord
+                        };
+
+                        MessageBox.Show($"Вы не ввели графический ключ. Осталось {_amountOfAttempt} {_attemptWord}");
+                    }
+                    else
+                    {
+                        var window = new AuthWindow();
+                        var vm = new AuthViewModel(_userRepository, _context, window);
+                        window.DataContext = vm;
+                        window.Show();
+
+                        _thisWindow.Close();
+                    }
                 }
-                
+
             });
         }
     }
@@ -112,7 +158,7 @@ public class GraphKeyWindowViewModel : ViewModelBase
     private bool CheckGraphKeys()
     {
         var userPoints =
-            _user.GraphKeyPoints.Select(userGraphKeyPoint => new XYPoint(userGraphKeyPoint.NumberOfPoint ,userGraphKeyPoint.XValue, userGraphKeyPoint.YValue)).ToList();
+            _user.GraphKeyPoints.Select(userGraphKeyPoint => new XYPoint(userGraphKeyPoint.NumberOfPoint, userGraphKeyPoint.XValue, userGraphKeyPoint.YValue)).ToList();
 
         var i = 0;
         foreach (var userPoint in userPoints)

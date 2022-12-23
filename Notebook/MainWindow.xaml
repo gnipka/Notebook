@@ -67,6 +67,11 @@
             <TabItem Header="Графический ключ">
                 <StackPanel>
                     <Button  Margin="20" Command="{Binding ChooseImage}" >Выбрать картинку</Button>
+                    <TextBlock Foreground="White" Margin="0 5 0 0">Допустимое отклонение от заданной точки в пикселях</TextBlock>
+                    <xctk:IntegerUpDown Value="{Binding DeltaPixels}" Margin="5 5 0 0" Foreground="White" Minimum="0" Background="{DynamicResource MaterialDesignPaper}" Width="100" HorizontalAlignment="Left"></xctk:IntegerUpDown>
+                    <TextBlock Foreground="White" Margin="0 5 0 0">Допустимое количество попыток ввода графического ключа</TextBlock>
+                    <xctk:IntegerUpDown Value="{Binding AmountOfAttempt}" Margin="5 5 0 0" Foreground="White" Minimum="1" Background="{DynamicResource MaterialDesignPaper}" Width="100" HorizontalAlignment="Left"></xctk:IntegerUpDown>
+
                     <Image Name="image" MaxWidth="600" MinWidth="600" MaxHeight="300" MinHeight="300" Source="{Binding Image}" MouseLeftButtonDown="Image_OnMouseLeftButtonDown"></Image>
                     <Button  Margin="20" Click="ButtonBase_OnClick" Command="{Binding SaveCommand}">Сохранить</Button>
 

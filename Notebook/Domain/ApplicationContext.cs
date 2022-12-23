@@ -40,18 +40,20 @@ namespace Notebook.Domain
                 {
                     Id = 1,
                     Username = "login",
-                    Password = @"\u001e\u000f\u001d\u001d\u0019\u0001\u001c\n", // "password" ^ "n" -> "\u001e\u000f\u001d\u001d\u0019\u0001\u001c\n"
+                    Password = @"\u0001\0\u0018\u0002\u0016\u0004\u0003\u0005",
                     GraphKeyPoints = null,
                     KeyboardPoints = null,
                     PathToImage = "",
-                    DateRegister = DateTime.Now,
+                    DeltaPixels = 10,
+                    AmountOfAttempt = 3,
+                    DateRegister = new DateTime(2022, 12, 23, 17, 33, 13),
                     Note = null,
                     NoteId = 1,
                     HasGraphKey = false,
                     HasKeyboard = false, 
-                    CodePhrase = ""
+                    CodePhrase = "",
                 });
-
+            // qak - ключ гаммирования по данному времени
 
         }
 

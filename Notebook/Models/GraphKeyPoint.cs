@@ -22,12 +22,7 @@ namespace Notebook.Models
         /// Значение точки по Y
         /// </summary>
         public double YValue { get; set; }
-
-        /// <summary>
-        /// Допустимое отклонение в пикселях
-        /// </summary>
-        public double Delta { get; set; }
-
+        
         /// <summary>
         /// Номер точки в последовательности точек ключа
         /// </summary>

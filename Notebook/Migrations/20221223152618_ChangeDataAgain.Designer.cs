@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221223152618_ChangeDataAgain")]
+    partial class ChangeDataAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,8 +111,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6743),
-                            DateUpdated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6744),
+                            DateCreated = new DateTime(2022, 12, 23, 18, 26, 18, 235, DateTimeKind.Local).AddTicks(3234),
+                            DateUpdated = new DateTime(2022, 12, 23, 18, 26, 18, 235, DateTimeKind.Local).AddTicks(3234),
                             NoteText = ""
                         });
                 });
@@ -179,7 +181,7 @@ namespace Notebook.Migrations
                             HasGraphKey = false,
                             HasKeyboard = false,
                             NoteId = 1,
-                            Password = "\\u0001\\0\\u0018\\u0002\\u0016\\u0004\\u0003\\u0005",
+                            Password = "\\u0006\\n\\u0001\\u0005\\u001c\\u001d\\u0004\\u000f",
                             PathToImage = "",
                             Username = "login"
                         });

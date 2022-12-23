@@ -21,7 +21,7 @@ namespace Notebook.ViewModels
         private readonly IRepository<User> _userRepository;
         private readonly ApplicationContext _context;
         private readonly Window _authWindow;
-
+        
         #endregion
 
         #region Properties

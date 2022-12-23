@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221223141610_AddDeltaPixels")]
+    partial class AddDeltaPixels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,8 +111,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6743),
-                            DateUpdated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6744),
+                            DateCreated = new DateTime(2022, 12, 23, 17, 16, 10, 408, DateTimeKind.Local).AddTicks(9954),
+                            DateUpdated = new DateTime(2022, 12, 23, 17, 16, 10, 408, DateTimeKind.Local).AddTicks(9955),
                             NoteText = ""
                         });
                 });
@@ -123,9 +125,6 @@ namespace Notebook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AmountOfAttempt")
-                        .HasColumnType("int");
-
                     b.Property<string>("CodePhrase")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -133,8 +132,8 @@ namespace Notebook.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeltaPixels")
-                        .HasColumnType("int");
+                    b.Property<double>("DeltaPixels")
+                        .HasColumnType("float");
 
                     b.Property<int>("ErrorRate")
                         .HasColumnType("int");
@@ -171,15 +170,14 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            AmountOfAttempt = 3,
                             CodePhrase = "",
-                            DateRegister = new DateTime(2022, 12, 23, 17, 33, 13, 0, DateTimeKind.Unspecified),
-                            DeltaPixels = 10,
+                            DateRegister = new DateTime(2022, 12, 23, 17, 16, 10, 409, DateTimeKind.Local).AddTicks(72),
+                            DeltaPixels = 10.0,
                             ErrorRate = 0,
                             HasGraphKey = false,
                             HasKeyboard = false,
                             NoteId = 1,
-                            Password = "\\u0001\\0\\u0018\\u0002\\u0016\\u0004\\u0003\\u0005",
+                            Password = "\\u001e\\u000f\\u001d\\u001d\\u0019\\u0001\\u001c\\n",
                             PathToImage = "",
                             Username = "login"
                         });

@@ -49,6 +49,16 @@ namespace Notebook.Models
         public int ErrorRate { get; set; }
 
         /// <summary>
+        /// Допустимое отклонение в пикселях
+        /// </summary>
+        public int DeltaPixels { get; set; }
+
+        /// <summary>
+        /// Количество попыток ввода графического ключа
+        /// </summary>
+        public int AmountOfAttempt { get; set; }
+
+        /// <summary>
         /// Путь к картинке для графического ключа
         /// </summary>
         public string PathToImage { get; set; }

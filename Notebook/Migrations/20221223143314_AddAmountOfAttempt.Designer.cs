@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221223143314_AddAmountOfAttempt")]
+    partial class AddAmountOfAttempt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,8 +111,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6743),
-                            DateUpdated = new DateTime(2022, 12, 23, 18, 28, 49, 574, DateTimeKind.Local).AddTicks(6744),
+                            DateCreated = new DateTime(2022, 12, 23, 17, 33, 13, 945, DateTimeKind.Local).AddTicks(974),
+                            DateUpdated = new DateTime(2022, 12, 23, 17, 33, 13, 945, DateTimeKind.Local).AddTicks(975),
                             NoteText = ""
                         });
                 });
@@ -173,13 +175,13 @@ namespace Notebook.Migrations
                             Id = 1,
                             AmountOfAttempt = 3,
                             CodePhrase = "",
-                            DateRegister = new DateTime(2022, 12, 23, 17, 33, 13, 0, DateTimeKind.Unspecified),
+                            DateRegister = new DateTime(2022, 12, 23, 17, 33, 13, 945, DateTimeKind.Local).AddTicks(1085),
                             DeltaPixels = 10,
                             ErrorRate = 0,
                             HasGraphKey = false,
                             HasKeyboard = false,
                             NoteId = 1,
-                            Password = "\\u0001\\0\\u0018\\u0002\\u0016\\u0004\\u0003\\u0005",
+                            Password = "\\u001e\\u000f\\u001d\\u001d\\u0019\\u0001\\u001c\\n",
                             PathToImage = "",
                             Username = "login"
                         });

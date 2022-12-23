@@ -94,15 +94,17 @@ public class RegistrationWindowViewModel : ViewModelBase
 
                 await _context.Notes.AddAsync(note);
                 await _context.SaveChangesAsync();
-
+                var dateNow = DateTime.Now;
                 var user = new User
                 {
                     Username = Login,
-                    Password = Cipher(Pass, "n"),
-                    DateRegister = DateTime.Now,
+                    Password = Cipher(Pass, GenerateKey(dateNow.Ticks)),
+                    DateRegister = dateNow,
                     GraphKeyPoints = null,
                     HasGraphKey = false,
                     PathToImage = "",
+                    DeltaPixels = 0,
+                    AmountOfAttempt = 1,
                     NoteId = _context.Notes.First(x => x == note).Id,
                     HasKeyboard = false,
                     KeyboardPoints = null,
@@ -155,5 +157,21 @@ public class RegistrationWindowViewModel : ViewModelBase
         return res;
     }
 
+    //генерация ключа для пользователя в зависимости от времени регистрации
+    private string GenerateKey(long ticks)
+    {
+        var alphabet = new List<string>
+        {
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+            "v", "w", "x", "y", "z"
+        };
+
+        var key = new StringBuilder();
+        key.Append(alphabet[(int)(ticks % 24)]);
+        key.Append(alphabet[(int)(ticks % 25)]);
+        key.Append(alphabet[(int)(ticks % 26)]);
+
+        return key.ToString();
+    }
     #endregion
 }

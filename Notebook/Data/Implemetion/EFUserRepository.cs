@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using Notebook.Data.Abstract;
 using Notebook.Domain;
 using Notebook.Models;
@@ -41,16 +42,17 @@ namespace Notebook.Data.Implemetion
 
         }
 
-        public Task<User?> VerifyUserAsync(string username, string password)
+        public async Task<User?> VerifyUserAsync(string username, string password)
         {
-            var passwordEncode = Cipher(password, "n");
+            var user = await GetByLoginAsync(username);
+            var passwordEncode = Cipher(password, GenerateKey(user.DateRegister.Ticks));
             var value = _context.Users
                 .Include(x => x.GraphKeyPoints)
                 .Include(x => x.KeyboardPoints)
                 .Include(x => x.Note)
                 .ToList()
                 .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
-            return Task.FromResult(value);
+            return value;
         }
 
         public async Task<bool> SaveAsync(User user)
@@ -121,5 +123,21 @@ namespace Notebook.Data.Implemetion
             return res;
         }
 
+        //генерация ключа для пользователя в зависимости от времени регистрации
+        private string GenerateKey(long ticks)
+        {
+            var alphabet = new List<string>
+            {
+                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+                "v", "w", "x", "y", "z"
+            };
+
+            var key = new StringBuilder();
+            key.Append(alphabet[(int)(ticks % 24)]);
+            key.Append(alphabet[(int)(ticks % 25)]);
+            key.Append(alphabet[(int)(ticks % 26)]);
+
+            return key.ToString();
+        }
     }
 }

@@ -42,7 +42,9 @@ public class MainWindowViewModel : ViewModelBase
     private List<KeyboardPoint> _keyboardPoints = new List<KeyboardPoint>();
 
     private IEnumerable<XYPoint> _arrayOfPoints;
-    
+    private int _deltaPixels;
+    private int _amountOfAttempt;
+
     #endregion
 
     #region Constructors
@@ -55,6 +57,8 @@ public class MainWindowViewModel : ViewModelBase
         _thisWindow = thisWindow;
         Image = user.PathToImage;
         UserNote = user.Note.NoteText;
+        DeltaPixels = user.DeltaPixels;
+        AmountOfAttempt = user.AmountOfAttempt;
         Phrase = user.CodePhrase;
         if(user.KeyboardPoints != null)
             _keyboardPoints = user.KeyboardPoints.ToList();
@@ -248,6 +252,26 @@ public class MainWindowViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
+
+    public int DeltaPixels
+    {
+        get => _deltaPixels;
+        set
+        {
+            _deltaPixels = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int AmountOfAttempt
+    {
+        get => _amountOfAttempt;
+        set
+        {
+            _amountOfAttempt = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion
 
     #region Commands
@@ -292,43 +316,48 @@ public class MainWindowViewModel : ViewModelBase
         {
             return new RelayCommand(async command =>
             {
-                if (ArrayOfPoints.Count() > 0)
+                if (MessageBox.Show(
+                        "Вы уверены, что хотите перезаписать все данные о графическом ключе для данного пользователя",
+                        "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    //удаляем уже существующие точки графического ключа у данного пользователя
-                    var graphKeys = _context.GraphKeyPoints.Where(x => x.UserId == _user.Id).ToList();
-                    foreach (var graphKey in graphKeys)
+                    if (ArrayOfPoints.Count() > 0)
                     {
-                        _context.GraphKeyPoints.Remove(graphKey);
-                    }
-
-                    _user.PathToImage = Image;
-                    _user.HasGraphKey = true;
-                    _user.GraphKeyPoints = new List<GraphKeyPoint>();
-                    var i = 0;
-                    foreach (var point in ArrayOfPoints)
-                    {
-                        var graphKeyPoint = new GraphKeyPoint
+                        //удаляем уже существующие точки графического ключа у данного пользователя
+                        var graphKeys = _context.GraphKeyPoints.Where(x => x.UserId == _user.Id).ToList();
+                        foreach (var graphKey in graphKeys)
                         {
-                            NumberOfPoint = i,
-                            User = _user,
-                            UserId = _user.Id,
-                            Delta = 10, // пока пусть 10)
-                            XValue = point.X,
-                            YValue = point.Y,
-                        };
-                        i++;
-                        _user.GraphKeyPoints.Add(graphKeyPoint);
+                            _context.GraphKeyPoints.Remove(graphKey);
+                        }
+
+                        _user.DeltaPixels = DeltaPixels;
+                        _user.AmountOfAttempt = AmountOfAttempt;
+                        _user.PathToImage = Image;
+                        _user.HasGraphKey = true;
+                        _user.GraphKeyPoints = new List<GraphKeyPoint>();
+                        var i = 0;
+                        foreach (var point in ArrayOfPoints)
+                        {
+                            var graphKeyPoint = new GraphKeyPoint
+                            {
+                                NumberOfPoint = i,
+                                User = _user,
+                                UserId = _user.Id,
+                                XValue = point.X,
+                                YValue = point.Y,
+                            };
+                            i++;
+                            _user.GraphKeyPoints.Add(graphKeyPoint);
+                        }
+
+                        await _userRepository.SaveAsync(_user);
+
+                        MessageBox.Show("Графический ключ установлен");
                     }
-
-                    await _userRepository.SaveAsync(_user);
-
-                    MessageBox.Show("Графический ключ установлен");
+                    else
+                    {
+                        MessageBox.Show("Вы не ввели графический ключ");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Вы не ввели графический ключ");
-                }
-                
             });
         }
     }
