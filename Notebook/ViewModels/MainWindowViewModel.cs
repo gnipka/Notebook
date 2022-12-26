@@ -40,10 +40,14 @@ public class MainWindowViewModel : ViewModelBase
     private int _errorRate = 30;
     private bool _addKeyboard = false;
     private List<KeyboardPoint> _keyboardPoints = new List<KeyboardPoint>();
+    private List<Result> _results = new List<Result>();
+    private List<Result> _resultsOld = new List<Result>();
 
     private IEnumerable<XYPoint> _arrayOfPoints;
     private int _deltaPixels;
     private int _amountOfAttempt;
+    private int _amountOfSymbol;
+    private int _rightBoardAmountSymbol;
 
     #endregion
 
@@ -59,10 +63,39 @@ public class MainWindowViewModel : ViewModelBase
         UserNote = user.Note.NoteText;
         DeltaPixels = user.DeltaPixels;
         AmountOfAttempt = user.AmountOfAttempt;
-        Phrase = user.CodePhrase;
-        if(user.KeyboardPoints != null)
-            _keyboardPoints = user.KeyboardPoints.ToList();
-        ErrorRate = user.ErrorRate;
+
+        if (user.HasKeyboard)
+        {
+            if (user.KeyboardPoints != null)
+            {
+                _keyboardPoints = user.KeyboardPoints.ToList();
+                for (int i = 0; i < _keyboardPoints.Count; i++)
+                {
+                    _resultsOld.Add(new Result { Point = _keyboardPoints[i], Time = _keyboardPoints[i].Time });
+
+                    if (_keyboardPoints[i].LeftLimit > _keyboardPoints[i].Time || _keyboardPoints[i].RightLimit < _keyboardPoints[i].Time)
+                    {
+                        _resultsOld.Last().ResultBool = false;
+                        _resultsOld.Last().ResultStirng = "Запрещен";
+                    }
+                    else
+                    {
+                        _resultsOld.Last().ResultBool = true;
+                        _resultsOld.Last().ResultStirng = "Разрешен";
+                    }
+                }
+            }
+            Phrase = user.CodePhrase;
+            ErrorRate = user.ErrorRate;
+            AmountOfSymbol = user.AmountOfSymbol;
+            RightBoardAmountSymbol = user.CodePhrase.Length;
+        }
+        else
+        {
+            ErrorRate = 30;
+            AmountOfSymbol = 1;
+            RightBoardAmountSymbol = 1;
+        }
     }
 
     #endregion
@@ -126,66 +159,90 @@ public class MainWindowViewModel : ViewModelBase
         {
             _phraseChecker = value;
 
-
-            if (_phraseChecker.Substring(_phraseChecker.Length - 1) != "\n" && _phraseChecker.Substring(_phraseChecker.Length - 1) != "\r")
+            if (_phraseChecker != "")
             {
 
-                if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
+                if (_phraseChecker.Substring(_phraseChecker.Length - 1) != "\n" && _phraseChecker.Substring(_phraseChecker.Length - 1) != "\r")
                 {
-                    _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
-                    if (_counterChar == _formatterPhrase.Length - 1)
+
+                    if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
                     {
-                        if (_counterPhrase == CountRepeat)
+                        if (_table.Count() == 0)
+                            _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
+                        else
                         {
-                            _run = false;
-                            _addKeyboard = true;
-                            _keyboardPoints = new List<KeyboardPoint>();
-                            for (int i = 0; i < Phrase.Length; i++)
+                            var table = _table.Last();
+                            _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds - table.Time, Number = _counterChar });
+                        }
+                        if (_counterChar == _formatterPhrase.Length - 1)
+                        {
+                            if (_counterPhrase == CountRepeat)
                             {
-                                var times = _table.Where(x => x.Number == i).ToList();
-                                times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
-                                times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
-                                var mean = times.Average(x => x.Time);
+                                _run = false;
+                                _addKeyboard = true;
+                                _keyboardPoints = new List<KeyboardPoint>();
 
-                                var keyboardPoint = new KeyboardPoint
+                                for (int i = 0; i < Phrase.Length; i++)
                                 {
-                                    Symbol = Phrase[i],
-                                    Time = (long)mean,
-                                    LeftLimit = (long)mean - (long)mean * ErrorRate / 100,
-                                    RightLimit = (long)mean + (long)mean * ErrorRate / 100,
-                                    NumberOfChar = i,
-                                    User = _user,
-                                    UserId = _user.Id
-                                };
+                                    var times = _table.Where(x => x.Number == i).ToList();
+                                    times.Remove(times.First(x => x.Time == times.Max(x => x.Time)));
+                                    times.Remove(times.First(x => x.Time == times.Min(x => x.Time)));
+                                    var mean = times.Average(x => x.Time);
 
-                                _keyboardPoints.Add(keyboardPoint);
+                                    var keyboardPoint = new KeyboardPoint
+                                    {
+                                        Symbol = Phrase[i],
+                                        Time = mean,
+                                        LeftLimit = mean - mean * ErrorRate / 100,
+                                        RightLimit = mean + mean * ErrorRate / 100,
+                                        NumberOfChar = i,
+                                        User = _user,
+                                        UserId = _user.Id
+                                    };
+
+                                    _keyboardPoints.Add(keyboardPoint);
+
+                                    _results.Add(new Result { Point = keyboardPoint, Time = keyboardPoint.Time });
+
+                                    if (keyboardPoint.LeftLimit > keyboardPoint.Time || keyboardPoint.RightLimit < keyboardPoint.Time)
+                                    {
+                                        _results.Last().ResultBool = false;
+                                        _results.Last().ResultStirng = "Запрещен";
+                                    }
+                                    else
+                                    {
+                                        _results.Last().ResultBool = true;
+                                        _results.Last().ResultStirng = "Разрешен";
+                                    }
+
+                                }
+                                RightBoardAmountSymbol = Phrase.Count();
+                                AmountOfSymbol = RightBoardAmountSymbol / 2;
+                                MessageBox.Show("Ввод законечен");
 
                             }
-
-                            MessageBox.Show("Ввод законечен");
-
+                            else
+                            {
+                                _counterChar = 0;
+                                _currentCharPhrase = _formatterPhrase[_counterChar];
+                                _counterPhrase++;
+                            }
                         }
                         else
                         {
-                            _counterChar = 0;
+                            _counterChar++;
                             _currentCharPhrase = _formatterPhrase[_counterChar];
-                            _counterPhrase++;
                         }
+
                     }
                     else
                     {
-                        _counterChar++;
-                        _currentCharPhrase = _formatterPhrase[_counterChar];
+                        _run = false;
+                        Time = 0;
+                        ReadOnly = true;
+                        _phraseChecker = String.Empty;
+                        MessageBox.Show("Ошибка при вводе фразы. Необходимо начать заново :(");
                     }
-
-                }
-                else
-                {
-                    _run = false;
-                    Time = 0;
-                    ReadOnly = true;
-                    _phraseChecker = String.Empty;
-                    MessageBox.Show("Ошибка при вводе фразы. Необходимо начать заново :(");
                 }
             }
 
@@ -272,6 +329,26 @@ public class MainWindowViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
+
+    public int AmountOfSymbol
+    {
+        get => _amountOfSymbol;
+        set
+        {
+            _amountOfSymbol = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int RightBoardAmountSymbol
+    {
+        get => _rightBoardAmountSymbol;
+        set
+        {
+            _rightBoardAmountSymbol = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion
 
     #region Commands
@@ -284,7 +361,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 _user.Note.NoteText = _userNote;
                 _user.Note.DateUpdated = DateTime.Now;
-                
+
                 await _userRepository.SaveAsync(_user);
 
                 MessageBox.Show("Записи сохранены");
@@ -305,7 +382,7 @@ public class MainWindowViewModel : ViewModelBase
                 {
                     Image = file.FileName;
                 }
-                
+
             });
         }
     }
@@ -388,13 +465,14 @@ public class MainWindowViewModel : ViewModelBase
                 if (Phrase != "")
                 {
                     Time = 0;
-                    _phraseChecker = String.Empty;
+                    PhraseChecker = "";
                     _counterChar = 0;
                     _counterPhrase = 1;
                     _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
                     _run = true; // ставим метку для таймера
                     _formatterPhrase = Phrase;
                     ReadOnly = false;
+                    _results = new List<Result>();
                     StartTimer(); // запускаем таймер
                 }
                 else
@@ -427,6 +505,7 @@ public class MainWindowViewModel : ViewModelBase
                     _user.HasKeyboard = true;
                     _user.KeyboardPoints = new List<KeyboardPoint>();
                     _user.ErrorRate = ErrorRate;
+                    _user.AmountOfSymbol = AmountOfSymbol;
 
                     for (int i = 0; i < Phrase.Length; i++)
                     {
@@ -466,10 +545,22 @@ public class MainWindowViewModel : ViewModelBase
         {
             return new RelayCommand(command =>
             {
-                var window = new PlotKeyboardWindow();
-                var vm = new PlotKeyboardViewModel(_keyboardPoints);
-                window.DataContext = vm;
-                window.Show();
+                if (_addKeyboard)
+                {
+                    var windowReport = new ReportWindow();
+                    var vmReport = new ReportViewModel(_results, "Разрешен", false);
+                    windowReport.DataContext = vmReport;
+                    windowReport.Show();
+                }
+                else if(_resultsOld.Count != 0)
+                {
+                    var windowReport = new ReportWindow();
+                    var vmReport = new ReportViewModel(_resultsOld, "Разрешен", false);
+                    windowReport.DataContext = vmReport;
+                    windowReport.Show();
+                }
+                else
+                    MessageBox.Show("Данные для построения графика отсутствуют");
             });
         }
     }

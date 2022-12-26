@@ -21,17 +21,17 @@ namespace Notebook.Models
         /// <summary>
         /// Время между предыдущим и текущим
         /// </summary>
-        public long Time { get; set; }
+        public double Time { get; set; }
 
         /// <summary>
         /// Левая граница времени
         /// </summary>
-        public long LeftLimit { get; set; }
+        public double LeftLimit { get; set; }
 
         /// <summary>
         /// Правая граница времени
         /// </summary>
-        public long RightLimit { get; set; }
+        public double RightLimit { get; set; }
 
         /// <summary>
         /// Номер символа в фразе

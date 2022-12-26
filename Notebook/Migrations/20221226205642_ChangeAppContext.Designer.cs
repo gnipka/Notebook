@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221226205642_ChangeAppContext")]
+    partial class ChangeAppContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,21 +59,21 @@ namespace Notebook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double>("LeftLimit")
-                        .HasColumnType("float");
+                    b.Property<long>("LeftLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("NumberOfChar")
                         .HasColumnType("int");
 
-                    b.Property<double>("RightLimit")
-                        .HasColumnType("float");
+                    b.Property<long>("RightLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<double>("Time")
-                        .HasColumnType("float");
+                    b.Property<long>("Time")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -109,8 +111,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 27, 1, 49, 36, 828, DateTimeKind.Local).AddTicks(3193),
-                            DateUpdated = new DateTime(2022, 12, 27, 1, 49, 36, 828, DateTimeKind.Local).AddTicks(3195),
+                            DateCreated = new DateTime(2022, 12, 26, 23, 56, 42, 16, DateTimeKind.Local).AddTicks(2523),
+                            DateUpdated = new DateTime(2022, 12, 26, 23, 56, 42, 16, DateTimeKind.Local).AddTicks(2524),
                             NoteText = ""
                         });
                 });

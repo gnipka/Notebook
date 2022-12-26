@@ -59,6 +59,11 @@ namespace Notebook.Models
         public int AmountOfAttempt { get; set; }
 
         /// <summary>
+        /// Количество символов для входа
+        /// </summary>
+        public int AmountOfSymbol{ get; set; }
+
+        /// <summary>
         /// Путь к картинке для графического ключа
         /// </summary>
         public string PathToImage { get; set; }

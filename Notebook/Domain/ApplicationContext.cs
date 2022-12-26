@@ -52,6 +52,8 @@ namespace Notebook.Domain
                     HasGraphKey = false,
                     HasKeyboard = false, 
                     CodePhrase = "",
+                    AmountOfSymbol = 1,
+                    ErrorRate = 30
                 });
             // qak - ключ гаммирования по данному времени
 

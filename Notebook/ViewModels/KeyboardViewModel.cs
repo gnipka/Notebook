@@ -19,6 +19,15 @@ namespace Notebook.ViewModels
         public int Number { get; set; }
     }
 
+    public class Result
+    {
+        public KeyboardPoint Point { get; set; }
+        public bool ResultBool { get; set; }
+        public string ResultStirng { get; set; }
+        public double Time { get; set; }
+    }
+
+
     internal class KeyboardViewModel : ViewModelBase
     {
         #region Constructor
@@ -38,7 +47,7 @@ namespace Notebook.ViewModels
         #endregion
 
         #region Variables
-        private string _phrase;
+        private string _phrase = "";
         private string _phraseChecker;
         private int _leftBord;
         private int _rightBord;
@@ -52,6 +61,7 @@ namespace Notebook.ViewModels
         private int _counterPhrase;
         private string _formatterPhrase;
         private List<Cell> _table = new List<Cell>();
+        private List<Result> _results = new List<Result>();
 
         private readonly string _login;
         private readonly User _user;
@@ -83,7 +93,14 @@ namespace Notebook.ViewModels
 
                     if (_phraseChecker[_phraseChecker.Length - 1] == _currentCharPhrase)
                     {
-                        _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
+                        if (_table.Count() == 0)
+                            _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds, Number = _counterChar });
+                        else
+                        {
+                            var table = _table.Last();
+                            _table.Add(new Cell { Symbol = _phraseChecker[_phraseChecker.Length - 1], Time = _sw.ElapsedMilliseconds - table.Time, Number = _counterChar });
+                        }
+
                         if (_counterChar == _formatterPhrase.Length - 1)
                         {
                             if (_counterPhrase == CountRepeat)
@@ -99,22 +116,49 @@ namespace Notebook.ViewModels
 
                                     var keyboard = _user.KeyboardPoints.First(x => x.NumberOfChar == i);
 
+                                    _results.Add(new Result { Point = keyboard, Time = mean});
+
                                     if (keyboard.LeftLimit > mean || keyboard.RightLimit < mean)
                                     {
-                                        MessageBox.Show("Доступ запрещен");
-                                        _run = false;
-                                        Time = 0;
-                                        ReadOnly = true;
-                                        _phraseChecker = String.Empty;
-                                        return;
+                                        _results.Last().ResultBool = false;
+                                        _results.Last().ResultStirng = "Запрещен";
+                                    }
+                                    else
+                                    {
+                                        _results.Last().ResultBool = true;
+                                        _results.Last().ResultStirng = "Разрешен";
                                     }
                                 }
-                                var window = new MainWindow();
-                                var vm = new MainWindowViewModel(_user, _userRepository, _context, window);
-                                window.DataContext = vm;
-                                window.Show();
 
-                                _thisWindow.Close();
+                                if (_results.Count(x => x.ResultBool == true) >= _user.AmountOfSymbol)
+                                {
+                                    var window = new MainWindow();
+                                    var vm = new MainWindowViewModel(_user, _userRepository, _context, window);
+                                    window.DataContext = vm;
+                                    window.Show();
+
+                                    var windowReport = new ReportWindow();
+                                    var vmReport = new ReportViewModel(_results, "Разрешен", true);
+                                    windowReport.DataContext = vmReport;
+                                    windowReport.Show();
+
+                                    _thisWindow.Close();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Доступ запрещен");
+                                    _run = false;
+                                    Time = 0;
+                                    ReadOnly = true;
+                                    _phraseChecker = String.Empty;
+
+                                    var windowReport = new ReportWindow();
+                                    var vmReport = new ReportViewModel(_results, "Запрещен", true);
+                                    windowReport.DataContext = vmReport;
+                                    windowReport.Show();
+                                    return;
+                                }
+
                             }
                             else
                             {
@@ -225,25 +269,31 @@ namespace Notebook.ViewModels
             {
                 return _checkPhrase ??= new RelayCommand(async x =>
                 {
-                    if (CountRepeat < RightBord && CountRepeat > LeftBord)
+                    if (Phrase != "")
                     {
-                        if (Phrase.Trim() == _user.CodePhrase)
+                        if (CountRepeat < RightBord && CountRepeat > LeftBord)
                         {
-                            // добавить проверку фразы из бд
-                            _counterChar = 0;
-                            _counterPhrase = 1;
-                            _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
-                            _run = true; // ставим метку для таймера
-                            _formatterPhrase = Phrase;
-                            var a = _user.KeyboardPoints;
-                            ReadOnly = false;
-                            StartTimer(); // запускаем таймер
+                            if (Phrase.Trim() == _user.CodePhrase)
+                            {
+                                // добавить проверку фразы из бд
+                                _counterChar = 0;
+                                _counterPhrase = 1;
+                                _currentCharPhrase = Phrase[_counterChar]; // берем первый символ фразы
+                                _run = true; // ставим метку для таймера
+                                _formatterPhrase = Phrase;
+                                var a = _user.KeyboardPoints;
+                                ReadOnly = false;
+                                StartTimer(); // запускаем таймер
+                            }
+                            else
+                                MessageBox.Show("Фраза введена неверно");
                         }
                         else
-                            MessageBox.Show("Фраза введена неверно");
+                            MessageBox.Show("Проверьте корректность количества повторов");
                     }
                     else
-                        MessageBox.Show("Проверьте корректность количества повторов");
+                        MessageBox.Show("Введите фразу");
+
                 });
             }
         }

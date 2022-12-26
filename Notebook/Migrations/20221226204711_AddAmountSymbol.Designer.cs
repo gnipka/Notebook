@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notebook.Domain;
 
@@ -11,9 +12,10 @@ using Notebook.Domain;
 namespace Notebook.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221226204711_AddAmountSymbol")]
+    partial class AddAmountSymbol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,21 +59,21 @@ namespace Notebook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double>("LeftLimit")
-                        .HasColumnType("float");
+                    b.Property<long>("LeftLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("NumberOfChar")
                         .HasColumnType("int");
 
-                    b.Property<double>("RightLimit")
-                        .HasColumnType("float");
+                    b.Property<long>("RightLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<double>("Time")
-                        .HasColumnType("float");
+                    b.Property<long>("Time")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -109,8 +111,8 @@ namespace Notebook.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2022, 12, 27, 1, 49, 36, 828, DateTimeKind.Local).AddTicks(3193),
-                            DateUpdated = new DateTime(2022, 12, 27, 1, 49, 36, 828, DateTimeKind.Local).AddTicks(3195),
+                            DateCreated = new DateTime(2022, 12, 26, 23, 47, 10, 878, DateTimeKind.Local).AddTicks(6474),
+                            DateUpdated = new DateTime(2022, 12, 26, 23, 47, 10, 878, DateTimeKind.Local).AddTicks(6475),
                             NoteText = ""
                         });
                 });
@@ -175,11 +177,11 @@ namespace Notebook.Migrations
                         {
                             Id = 1,
                             AmountOfAttempt = 3,
-                            AmountOfSymbol = 1,
+                            AmountOfSymbol = 0,
                             CodePhrase = "",
                             DateRegister = new DateTime(2022, 12, 23, 17, 33, 13, 0, DateTimeKind.Unspecified),
                             DeltaPixels = 10,
-                            ErrorRate = 30,
+                            ErrorRate = 0,
                             HasGraphKey = false,
                             HasKeyboard = false,
                             NoteId = 1,

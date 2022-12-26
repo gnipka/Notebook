@@ -45,14 +45,18 @@ namespace Notebook.Data.Implemetion
         public async Task<User?> VerifyUserAsync(string username, string password)
         {
             var user = await GetByLoginAsync(username);
-            var passwordEncode = Cipher(password, GenerateKey(user.DateRegister.Ticks));
-            var value = _context.Users
-                .Include(x => x.GraphKeyPoints)
-                .Include(x => x.KeyboardPoints)
-                .Include(x => x.Note)
-                .ToList()
-                .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
-            return value;
+            if (user != null)
+            {
+                var passwordEncode = Cipher(password, GenerateKey(user.DateRegister.Ticks));
+                var value = _context.Users
+                    .Include(x => x.GraphKeyPoints)
+                    .Include(x => x.KeyboardPoints)
+                    .Include(x => x.Note)
+                    .ToList()
+                    .FirstOrDefault(x => x.Username == username && Regex.Unescape(x.Password) == passwordEncode);
+                return value;
+            }
+            return null;
         }
 
         public async Task<bool> SaveAsync(User user)
@@ -69,12 +73,16 @@ namespace Notebook.Data.Implemetion
                         dbEntry.Username = user.Username;
                         dbEntry.Password = user.Password;
                         dbEntry.DateRegister = user.DateRegister;
-                        dbEntry.PathToImage = user.PathToImage;
                         dbEntry.HasGraphKey = user.HasGraphKey;
-                        dbEntry.GraphKeyPoints = user.GraphKeyPoints;
-                        dbEntry.KeyboardPoints = user.KeyboardPoints;
+                        dbEntry.HasKeyboard = user.HasKeyboard;
                         dbEntry.CodePhrase = user.CodePhrase;
-                        dbEntry.HasKeyboard = user.HasKeyboard;                  
+                        dbEntry.ErrorRate = user.ErrorRate;
+                        dbEntry.DeltaPixels = user.DeltaPixels;
+                        dbEntry.AmountOfAttempt = user.AmountOfAttempt;
+                        dbEntry.AmountOfSymbol = user.AmountOfSymbol;
+                        dbEntry.PathToImage = user.PathToImage;
+                        dbEntry.GraphKeyPoints = user.GraphKeyPoints;
+                        dbEntry.KeyboardPoints = user.KeyboardPoints;            
                         dbEntry.Note = user.Note;
                     }
                 }
