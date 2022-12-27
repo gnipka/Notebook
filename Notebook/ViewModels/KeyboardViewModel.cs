@@ -141,6 +141,7 @@ namespace Notebook.ViewModels
                                     var vmReport = new ReportViewModel(_results, "Разрешен", true);
                                     windowReport.DataContext = vmReport;
                                     windowReport.Show();
+                                    _results.Clear();
 
                                     _thisWindow.Close();
                                 }
@@ -156,6 +157,7 @@ namespace Notebook.ViewModels
                                     var vmReport = new ReportViewModel(_results, "Запрещен", true);
                                     windowReport.DataContext = vmReport;
                                     windowReport.Show();
+                                    _results.Clear();
                                     return;
                                 }
 
