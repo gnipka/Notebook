@@ -47,7 +47,6 @@ public class MainWindowViewModel : ViewModelBase
     private int _deltaPixels;
     private int _amountOfAttempt;
     private int _amountOfSymbol;
-    private int _rightBoardAmountSymbol;
 
     #endregion
 
@@ -88,13 +87,11 @@ public class MainWindowViewModel : ViewModelBase
             Phrase = user.CodePhrase;
             ErrorRate = user.ErrorRate;
             AmountOfSymbol = user.AmountOfSymbol;
-            RightBoardAmountSymbol = user.CodePhrase.Length;
         }
         else
         {
             ErrorRate = 30;
-            AmountOfSymbol = 1;
-            RightBoardAmountSymbol = 1;
+            AmountOfSymbol = 50;
         }
     }
 
@@ -216,8 +213,7 @@ public class MainWindowViewModel : ViewModelBase
                                     }
 
                                 }
-                                RightBoardAmountSymbol = Phrase.Count();
-                                AmountOfSymbol = RightBoardAmountSymbol / 2;
+                                AmountOfSymbol = 50;
                                 MessageBox.Show("Ввод законечен");
 
                             }
@@ -335,18 +331,11 @@ public class MainWindowViewModel : ViewModelBase
         get => _amountOfSymbol;
         set
         {
-            _amountOfSymbol = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public int RightBoardAmountSymbol
-    {
-        get => _rightBoardAmountSymbol;
-        set
-        {
-            _rightBoardAmountSymbol = value;
-            OnPropertyChanged();
+            if (value >= 50 && value <= 100)
+            {
+                _amountOfSymbol = value;
+                OnPropertyChanged();
+            }
         }
     }
     #endregion
@@ -534,7 +523,28 @@ public class MainWindowViewModel : ViewModelBase
                     MessageBox.Show("Вход по клавиатурному подчерку добавлен");
                 }
                 else
-                    MessageBox.Show("Данные для сохранения отсутствуют");
+                {
+                    if (_user.HasKeyboard)
+                    {
+                        if (MessageBox.Show(
+                        "Вы не ввели данные для добавления клавиатурного подчерка. Перезаписать настройки существующего?",
+                        "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            if (_user.CodePhrase == Phrase)
+                            {
+                                _user.ErrorRate = ErrorRate;
+                                _user.AmountOfSymbol = AmountOfSymbol;
+                                await _userRepository.SaveAsync(_user);
+                            }
+                            else
+                                MessageBox.Show("Кодовая фраза не совпадает с ранее добавленной, для изменения настроек клавиатурного подчерка, введите корректную кодовую фразу");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Данные для сохранения отсутствуют");
+                    }
+                }
             });
         }
     }

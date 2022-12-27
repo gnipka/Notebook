@@ -130,7 +130,9 @@ namespace Notebook.ViewModels
                                     }
                                 }
 
-                                if (_results.Count(x => x.ResultBool == true) >= _user.AmountOfSymbol)
+                                var limit = Phrase.Count() * _user.AmountOfSymbol / 100;
+
+                                if (_results.Count(x => x.ResultBool == true) >= limit)
                                 {
                                     var window = new MainWindow();
                                     var vm = new MainWindowViewModel(_user, _userRepository, _context, window);
@@ -251,6 +253,7 @@ namespace Notebook.ViewModels
         }
         #endregion
 
+        #region Commands
         async void StartTimer()
         {
             await Task.Run(() =>
@@ -315,5 +318,6 @@ namespace Notebook.ViewModels
                 });
             }
         }
+        #endregion
     }
 }
