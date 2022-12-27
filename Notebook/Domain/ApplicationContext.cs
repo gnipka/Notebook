@@ -40,7 +40,7 @@ namespace Notebook.Domain
                 {
                     Id = 1,
                     Username = "login",
-                    Password = @"\u0001\0\u0018\u0002\u0016\u0004\u0003\u0005",
+                    Password = "иёжлчЪкє",
                     GraphKeyPoints = null,
                     KeyboardPoints = null,
                     PathToImage = "",
@@ -55,7 +55,7 @@ namespace Notebook.Domain
                     AmountOfSymbol = 1,
                     ErrorRate = 30
                 });
-            // qak - ключ гаммирования по данному времени
+            // шах - ключ гаммирования по данному времени
 
         }
 

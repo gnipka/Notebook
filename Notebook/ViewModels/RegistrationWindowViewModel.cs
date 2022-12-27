@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using Notebook.Data.Abstract;
@@ -85,6 +86,18 @@ public class RegistrationWindowViewModel : ViewModelBase
                     return;
                 }
 
+                if (!Regex.IsMatch(Login, "^[a-zA-Z0-9]+$"))
+                {
+                    MessageBox.Show("Логин должен содержать только буквы латинского алфавита и/или цифры");
+                    return;
+                }
+
+                if (!Regex.IsMatch(Pass, "^[a-zA-Z0-9]+$"))
+                {
+                    MessageBox.Show("Пароль должен содержать только буквы латинского алфавита и/или цифры");
+                    return;
+                }
+
                 var note = new Note
                 {
                     NoteText = "",
@@ -153,7 +166,6 @@ public class RegistrationWindowViewModel : ViewModelBase
             res += ((char)(text[i] ^ currentKey[i])).ToString();
         }
 
-        Debug.WriteLine(res);
         return res;
     }
 
@@ -162,16 +174,18 @@ public class RegistrationWindowViewModel : ViewModelBase
     {
         var alphabet = new List<string>
         {
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
-            "v", "w", "x", "y", "z"
+            "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й",
+            "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х",
+            "ц", "ч", "ш", "щ", "э", "ю", "я"
         };
 
         var key = new StringBuilder();
-        key.Append(alphabet[(int)(ticks % 24)]);
-        key.Append(alphabet[(int)(ticks % 25)]);
-        key.Append(alphabet[(int)(ticks % 26)]);
+        key.Append(alphabet[(int)(ticks % 31)]);
+        key.Append(alphabet[(int)(ticks % 32)]);
+        key.Append(alphabet[(int)(ticks % 33)]);
 
         return key.ToString();
     }
+
     #endregion
 }
