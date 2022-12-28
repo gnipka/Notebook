@@ -16,17 +16,19 @@ namespace Notebook.ViewModels
     {
         #region Variables
 
-        private string _login;
+        private User _login;
         private string _pass;
         private readonly IRepository<User> _userRepository;
         private readonly ApplicationContext _context;
         private readonly Window _authWindow;
-        
+
+        private List<User> _usersList;
+
         #endregion
 
         #region Properties
 
-        public string Login
+        public User Login
         {
             get { return _login; }
             set
@@ -46,6 +48,16 @@ namespace Notebook.ViewModels
             }
         }
 
+        public List<User> UsersList
+        {
+            get => _usersList;
+            set
+            {
+                _usersList = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         public AuthViewModel(IRepository<User> userRepository, ApplicationContext context, Window authWindow)
@@ -53,6 +65,7 @@ namespace Notebook.ViewModels
             _userRepository = userRepository;
             _context = context;
             _authWindow = authWindow;
+            UsersList = userRepository.GetAll().ToList();
         }
 
         #region Commands
@@ -63,7 +76,7 @@ namespace Notebook.ViewModels
             {
                 return new RelayCommand(async command =>
                 {
-                    if (string.IsNullOrWhiteSpace(Login))
+                    if (string.IsNullOrWhiteSpace(Login.Username))
                     {
                         MessageBox.Show("Вы не ввели логин");
                         return;
@@ -75,7 +88,7 @@ namespace Notebook.ViewModels
                         return;
                     }
 
-                    var user = await _userRepository.VerifyUserAsync(Login, Pass);
+                    var user = await _userRepository.VerifyUserAsync(Login.Username, Pass);
                     if (user != null)
                     {
                         if (user.HasGraphKey)
@@ -110,15 +123,15 @@ namespace Notebook.ViewModels
             {
                 return new RelayCommand(async command =>
                 {
-                    if (!string.IsNullOrWhiteSpace(Login))
+                    if (!string.IsNullOrWhiteSpace(Login.Username))
                     {
-                        var user = await _userRepository.GetByLoginAsync(Login);
+                        var user = await _userRepository.GetByLoginAsync(Login.Username);
                         if (user != null)
                         {
                             if (user.HasKeyboard)
                             {
                                 var window = new KeyboardWindow();
-                                var vm = new KeyboardViewModel(Login, user, _userRepository, _context, window);
+                                var vm = new KeyboardViewModel(Login.Username, user, _userRepository, _context, window);
                                 window.DataContext = vm;
                                 window.Show();
 

@@ -21,7 +21,7 @@
 
             <StackPanel Grid.Column="1">
                 <TextBlock HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignHeadline2TextBlock}" Foreground="LightBlue">Авторизация</TextBlock>
-                <TextBox Margin="0 20 0 0" materialDesign:HintAssist.Hint="Введите логин" Style="{DynamicResource MaterialDesignFloatingHintTextBox}" Foreground="LightBlue" Text="{Binding Login}"></TextBox>
+                <ComboBox MaxHeight="250" Margin="0 20 0 0" materialDesign:HintAssist.Hint="Введите логин" Style="{DynamicResource MaterialDesignComboBox}" Foreground="LightBlue" ItemsSource="{Binding UsersList}" DisplayMemberPath="Username" SelectedItem="{Binding Login}" SelectedValuePath="Username" ScrollViewer.VerticalScrollBarVisibility="Visible"></ComboBox>
                 <PasswordBox materialDesign:HintAssist.Hint="Введите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Foreground="LightBlue" PasswordChanged="PasswordBox_OnPasswordChanged"></PasswordBox>
                 <Button Foreground="LightBlue" Style="{DynamicResource  MaterialDesignFlatSecondaryButton}" Command="{Binding ForgotPassword}">Забыли пароль?</Button>
                 
