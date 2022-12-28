@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="RegistrationWindow" Height="250" Width="450" MinHeight="250" MaxHeight="250" MaxWidth="450" MinWidth="450" WindowStartupLocation="CenterScreen">
+        Title="Блокнот" Height="250" Width="450" MinHeight="250" MaxHeight="250" MaxWidth="450" MinWidth="450" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
             <TextBlock Margin="20 0 0 0" Style="{DynamicResource MaterialDesignHeadline4TextBlock}" Foreground="LightBlue" HorizontalAlignment="Center">Регистрация</TextBlock>

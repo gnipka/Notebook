@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="Авторизация" Height="400" Width="720"
+        Title="Блокнот" Height="420" Width="720"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid Margin="20">
@@ -25,7 +25,7 @@
                 <PasswordBox materialDesign:HintAssist.Hint="Введите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Foreground="LightBlue" PasswordChanged="PasswordBox_OnPasswordChanged"></PasswordBox>
                 <Button Foreground="LightBlue" Style="{DynamicResource  MaterialDesignFlatSecondaryButton}" Command="{Binding ForgotPassword}">Забыли пароль?</Button>
                 
-                <Grid Margin="0 40 0 0">
+                <Grid Margin="0 30 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
@@ -33,7 +33,9 @@
 
                     <Button Grid.Column="0" Foreground="LightBlue" Style="{DynamicResource  MaterialDesignOutlinedButton}" Margin="0 0 2 0" Command="{Binding AuthorizeCommand}">Войти</Button>
                     <Button Grid.Column="1" Foreground="LightBlue" Style="{DynamicResource MaterialDesignOutlinedButton}" Margin="2 0 0 0" Command="{Binding RegistrationCommand}">Регистрация</Button>
+                    
                 </Grid>
+                <Button Foreground="LightBlue" Margin="0 50 0 0" Command="{Binding Help}" Style="{DynamicResource  MaterialDesignFlatSecondaryButton}">Задание на лабораторную работу</Button>
             </StackPanel>
         </Grid>
     </Grid>

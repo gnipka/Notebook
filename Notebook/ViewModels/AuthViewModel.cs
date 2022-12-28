@@ -154,6 +154,18 @@ namespace Notebook.ViewModels
                 });
             }
         }
+
+        public RelayCommand Help
+        {
+            get
+            {
+                return new RelayCommand(command =>
+                {
+                    var window = new HelpWindow();
+                    window.Show();
+                });
+            }
+        }
         #endregion
     }
 }

@@ -1,0 +1,166 @@
+﻿<Window x:Class="Notebook.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notebook"
+        mc:Ignorable="d"
+         Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" WindowStartupLocation="CenterScreen"
+        Title="Блокнот" Height="550" Width="900">
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Height="60">
+                <TabItem.Header>
+                    <TextBlock Width="182"  Style="{DynamicResource MaterialDesignButtonTextBlock}">1 Изучение работы <LineBreak></LineBreak> клавиатурного подчерка</TextBlock>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Margin="20" Style="{DynamicResource MaterialDesignBody2TextBlock}">
+                    <Run>1.	Запустите программу "Notebook.exe"</Run>
+                    <LineBreak></LineBreak>
+                    <Run>2.	Создайте для себя учётную запись. Для этого нажать кнопку “Регистрация” и необходимо ввести в поля ввода логин и пароль</Run>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Image Margin="120 0 0 0" Height="200" Source="/Image/1.png"></Image>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Run>3.	После регистрации Вы попадете в личный кабинет своей учетной записи. Для настройки клавиатурного почерка перейдите на вкладку "Клавиатурный почерк"</Run>
+                    <LineBreak></LineBreak>
+                    <Run>4.	Введите подготовленную фразу и укажите число повторов (сколько раз Вы будете вводить эту фразу).</Run>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Image Margin="60 0 0 0" Source="/Image/2.png" Width="500"></Image>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Run>5.	Нажмите на кнопку "Начать ввод" и поставьте курсор в поле ниже.</Run>
+                    <LineBreak></LineBreak>
+                    <Run>6.	Теперь Вам предстоит вводить выбранную фразу указанное количество раз. Начните вводить фразу. После ввода последней буквы нажмите Enter для перехода на новую строчку (как в обычном текстовом редакторе), и вводите эту фразу снова. Как только будет введен последний символ последней строки Программа остановит таймер и перейдет в окно проверки собранных интервалов.</Run>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Image Source="/Image/3.png" Width="500" Margin="60 0 0 0"></Image>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Run>7.	После ввода фразы-ключа необходимо установить ползунок определения погрешности ввода в процентах для настройки допустимого отклонения, а также определить минимально допустимое количество символов, попадающих во временной интервал ввода. Сохраните настроенные параметры клавиатурного почерка.</Run>
+                    <LineBreak></LineBreak>
+                    <Run>8.	При необходимости визуальной оценки интервалов ввода символов фразу Вы можете открыть графики границ временного интервала, нажав кнопку "Графики границ временного интервала"</Run>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Image Source="/Image/4.png" Margin="100 0 0 0" Width="400"></Image>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Run>9.	Закройте Вашу учетную запись с помощью кнопки Выйти</Run>
+                    <Run>10. В окне авторизации впишите Ваш логин, оставив пустым поле ввода Пароль</Run>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Image Source="/Image/5.png" Width="300" Margin="140 0 0 0"></Image>
+                    <LineBreak></LineBreak>
+                    <LineBreak></LineBreak>
+                    <Run>11. Нажмите на кнопку Забыли пароль?</Run>
+                    <Run>12. Пройдите тест на доступ (фраза должна совпадать с той (теми) которые Вы уже вводили). В случае успешного ввода Вы получите доступ к учетной записи.</Run>
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Height="60">
+                <TabItem.Header>
+                    <TextBlock Width="182"  Style="{DynamicResource MaterialDesignButtonTextBlock}">2 Изучение работы <LineBreak></LineBreak> графического ключа</TextBlock>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Margin="20" Style="{DynamicResource MaterialDesignBody2TextBlock}">
+                        <Run>1.	Запустите программу "Notebook.exe"</Run>
+                        <LineBreak></LineBreak>
+                        <Run>2.	Создайте для себя учётную запись или войдите в уже существующую.</Run>
+                        <LineBreak></LineBreak>
+                        <Run>3.	Для настройки графического ключа перейдите во вкладку "Графический ключ".</Run>
+                        <LineBreak></LineBreak>
+                        <Run>4.	Нажав кнопку "Выбрать картинку", выберите изображение, которое послужит основой для графического ключа</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/6.png" Width="400" Margin="100 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>5. Укажите допустимое отклонение в пикселях от точки графического ключа, это позволит при указании точек при авторизации учитывать погрешность ввода.</Run>
+                        <LineBreak></LineBreak>
+                        <Run>6.	Укажите допустимое количество попыток ввода графического ключа. В случае, если попытки будут исчерпаны, пользователь попадает обратно на начальное окно авторизации.</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/7.png" Width="300" Margin="150 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>7. После указания параметров введите точки графического ключа, нажимая левой кнопкой мыши на различные места на изображении. Минимальная длина графического ключа – 1 точка. Учтите, что графический ключ должен быть понятен Вам, но неочевиден для других.</Run>
+                        <LineBreak></LineBreak>
+                        <Run>8.	Нажмите кнопку “Сохранить” и подтвердите действие.</Run>
+                        <LineBreak></LineBreak>
+                        <Run>9.	Закройте Вашу учетную запись с помощью кнопки Выйти</Run>
+                        <LineBreak></LineBreak>
+                        <Run>10. Введите свой логин и пароль в поля окна авторизации</Run>
+                        <LineBreak></LineBreak>
+                        <Run>11. При успешном вводе данных учетной записи Вы попадаете на окно ввода графического ключа</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/8.png" Width="400" Margin="100 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>12. Введите точки графического ключа в той последовательности, в который Вы их вводили при настройке графического ключа, нажимаю левую кнопку мыши. После чего нажмите кнопку "Войти".</Run>
+                        <LineBreak></LineBreak>
+                        <Run>13. При успешном вводе графического ключа откроется окно блокнота.</Run>
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Height="60">
+                <TabItem.Header>
+                    <TextBlock Width="182"  Style="{DynamicResource MaterialDesignButtonTextBlock}">3 Дополнительное задание</TextBlock>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Margin="20" Style="{DynamicResource MaterialDesignBody2TextBlock}">
+                        <Run>1.	Для попытки получения доступа к аккаунту программного комплекса запустите прикладное ПО, работающее с базой данных пользователей, запустив “Cipher.exe”. На интерфейсе прикладного ПО расположены содержимое базы данных в зашифрованном виде и панель управления.</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/9.png" Width="400" Margin="100 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>2.	Зная имя пользователя, выполните операцию дешифрования, указав исходное имя пользователя в качестве первой строки и зашифрованное имя пользователя в качестве второй строки и нажав на кнопку “Гаммировать”. Найти нужное зашифрованное имя пользователя можно, опираясь на дату регистрации и длину имени пользователя.</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/10.png" Width="300" Margin="160 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>3.	Получив результат дешифрования, проследите в нем закономерность и определите исходный ключ для шифрования. В данном случае можно заметить, что ключом является последовательность символов “шах” и длина ключа равна 3. Если закономерность не прослеживается и не получается путем гаммирования исходного имени пользователя и ключа получить нужное зашифрованное имя пользователя, то это означает, что выбранный пользователь в зашифрованной базе не совпадает с искомым пользователем и необходимо попробовать выполнить предыдущие шаги с другим пользователем из зашифрованной базы данных.</Run>
+                        <LineBreak></LineBreak>
+                        <Run>4.	Зная исходный ключ, получите исходный пароль пользователя, выполнив операцию дешифрования. В качестве первой строки указывается зашифрованный пароль пользователя, в качестве второй строки полученное на предыдущем этапе значение. </Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Image Source="/Image/11.png" Width="300" Margin="160 0 0 0"></Image>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>5.	Узнав необходимые учетные данные, Вы можете вернуться в основной программный комплекс и попробовать войти в аккаунт.</Run>
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Height="60">
+                <TabItem.Header>
+                    <TextBlock Width="182"  Style="{DynamicResource MaterialDesignButtonTextBlock}">Техническая информация</TextBlock>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Margin="20" Style="{DynamicResource MaterialDesignBody2TextBlock}">
+                        <Bold>Условия и ограничения:</Bold>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>- на пользовательском ПК необходима ОС Windows с предустановленной платформой .NET 6 и СУБД MS SQL Server</Run>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Bold>Минимальные требования:</Bold>
+                        <LineBreak></LineBreak>
+                        <LineBreak></LineBreak>
+                        <Run>- ОС Windows 8.1 и выше</Run>
+                        <LineBreak></LineBreak>
+                        <Run>- объем оперативной памяти 40960 Кб</Run>
+                        <LineBreak></LineBreak>
+                        <Run>- объем внешней памяти 256 Кб </Run>
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
