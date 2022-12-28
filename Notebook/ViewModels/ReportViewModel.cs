@@ -24,17 +24,24 @@ namespace Notebook.ViewModels
     internal class ReportViewModel : ViewModelBase
     {
         #region Constructors
-        public ReportViewModel(List<Result> results, string resultString, bool visible)
+        public ReportViewModel(List<Result> results, string resultString, bool visible, User user)
         {
             YFormatter = value => value.ToString("N2");
-
+            var variables = user.KeyboardPoints.ToList();
             if (visible)
+            {
                 Visible = Visibility.Visible;
+                for (int i = 0; i < variables.Count; i++)
+                {
+                    Chart4.Add(Math.Round(variables[i].Time / 1000, 2));
+                }
+            }
             else
+            {
                 Visible = Visibility.Collapsed;
+            }
 
             Tables = new List<Table>();
-
             for(int i = 0; i < results.Count; i++)
             {
                 Tables.Add(new Table
@@ -45,7 +52,7 @@ namespace Notebook.ViewModels
                     UpperLimit = Math.Round((double)results[i].Point.RightLimit / 1000, 2),
                     Result = results[i].ResultStirng
                 });
-
+                
                 Chart1.Add(Tables[i].UpperLimit);
                 Chart2.Add(Tables[i].Time);
                 Chart3.Add(Tables[i].LowerLimit);
@@ -115,6 +122,17 @@ namespace Notebook.ViewModels
             set
             {
                 _Chart3 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ChartValues<double> _Chart4 = new();
+        public ChartValues<double> Chart4
+        {
+            get => _Chart4;
+            set
+            {
+                _Chart4 = value;
                 OnPropertyChanged();
             }
         }

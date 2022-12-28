@@ -59,7 +59,8 @@
                 <lvc:CartesianChart.Series>
                     <lvc:LineSeries Title="Нижняя граница"  Values="{Binding Chart3}" Stroke="Lime" Fill="Transparent" PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}"></lvc:LineSeries>
                     <lvc:LineSeries Title="Введенные значения" Values="{Binding Chart2}" Stroke="Aqua" Fill="Transparent" PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}"></lvc:LineSeries>
-                    <lvc:LineSeries Title="Верхняя граница" Values="{Binding Chart1}" Stroke="DeepPink" Fill="Transparent" PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}"></lvc:LineSeries>
+                    <lvc:LineSeries Title="Эталонные значения" Values="{Binding Chart4}" Stroke="DeepPink" Fill="Transparent" PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}"></lvc:LineSeries>
+                    <lvc:LineSeries Title="Верхняя граница" Values="{Binding Chart1}" Stroke="Yellow" Fill="Transparent" PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}"></lvc:LineSeries>
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis FontSize="14" FontWeight="Bold" Foreground="White" Labels="{Binding CharChart}"></lvc:Axis>

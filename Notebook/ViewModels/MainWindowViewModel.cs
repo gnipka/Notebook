@@ -558,14 +558,14 @@ public class MainWindowViewModel : ViewModelBase
                 if (_addKeyboard)
                 {
                     var windowReport = new ReportWindow();
-                    var vmReport = new ReportViewModel(_results, "Разрешен", false);
+                    var vmReport = new ReportViewModel(_results, "Разрешен", false, _user);
                     windowReport.DataContext = vmReport;
                     windowReport.Show();
                 }
                 else if(_resultsOld.Count != 0)
                 {
                     var windowReport = new ReportWindow();
-                    var vmReport = new ReportViewModel(_resultsOld, "Разрешен", false);
+                    var vmReport = new ReportViewModel(_resultsOld, "Разрешен", false, _user);
                     windowReport.DataContext = vmReport;
                     windowReport.Show();
                 }

@@ -140,7 +140,7 @@ namespace Notebook.ViewModels
                                     window.Show();
 
                                     var windowReport = new ReportWindow();
-                                    var vmReport = new ReportViewModel(_results, "Разрешен", true);
+                                    var vmReport = new ReportViewModel(_results, "Разрешен", true, _user);
                                     windowReport.DataContext = vmReport;
                                     windowReport.Show();
                                     _results.Clear();
@@ -156,7 +156,7 @@ namespace Notebook.ViewModels
                                     _phraseChecker = String.Empty;
 
                                     var windowReport = new ReportWindow();
-                                    var vmReport = new ReportViewModel(_results, "Запрещен", true);
+                                    var vmReport = new ReportViewModel(_results, "Запрещен", true, _user);
                                     windowReport.DataContext = vmReport;
                                     windowReport.Show();
                                     _results.Clear();
